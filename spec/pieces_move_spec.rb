@@ -397,4 +397,207 @@ describe PiecesMoves do
       end
     end
   end
+
+  describe '#bishop_moves' do
+    describe 'when the bishop is white' do
+      describe 'when there is no piece in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = bishop_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [4, 4],
+                                'white')).to eql([[5, 5], [6, 6], [7, 7], [3, 3], [2, 2], [1, 1], [0, 0], [5, 3],
+                                                  [6, 2], [7, 1], [3, 5], [2, 6], [1, 7]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = bishop_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [0, 0],
+                                'white')).to eql([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = bishop_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [0, 7],
+                                'white')).to eql([[1, 6], [2, 5], [3, 4], [4, 3], [5, 2], [6, 1], [7, 0]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = bishop_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [7, 0],
+                                'white')).to eql([[6, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 6], [0, 7]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = bishop_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [7, 7],
+                                'white')).to eql([[6, 6], [5, 5], [4, 4], [3, 3], [2, 2], [1, 1], [0, 0]])
+          end
+        end
+      end
+      describe 'when there is one or more pieces in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = bishop_white
+            board[6][6] = pawn_white
+            board[0][0] = pawn_white
+            board[5][3] = pawn_white
+            board[1][7] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [4, 4], 'white')).to eql([[5, 5], [3, 3], [2, 2], [1, 1], [3, 5], [2, 6]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = bishop_white
+            board[4][4] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [0, 0], 'white')).to eql([[1, 1], [2, 2], [3, 3]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = bishop_white
+            board[4][3] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [0, 7], 'white')).to eql([[1, 6], [2, 5], [3, 4]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = bishop_white
+            board[3][4] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [7, 0], 'white')).to eql([[6, 1], [5, 2], [4, 3]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = bishop_white
+            board[3][3] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [7, 7], 'white')).to eql([[6, 6], [5, 5], [4, 4]])
+          end
+        end
+      end
+    end
+    describe 'when the bishop is black' do
+      describe 'when there is no piece in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = bishop_black
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [4, 4],
+                                'black')).to eql([[5, 5], [6, 6], [7, 7], [3, 3], [2, 2], [1, 1], [0, 0], [5, 3],
+                                                  [6, 2], [7, 1], [3, 5], [2, 6], [1, 7]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = bishop_black
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [0, 0],
+                                'black')).to eql([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = bishop_black
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [0, 7],
+                                'black')).to eql([[1, 6], [2, 5], [3, 4], [4, 3], [5, 2], [6, 1], [7, 0]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = bishop_black
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [7, 0],
+                                'black')).to eql([[6, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 6], [0, 7]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = bishop_black
+          end
+          it 'returns the possible moves' do
+            expect(bishop_moves(board, [7, 7],
+                                'black')).to eql([[6, 6], [5, 5], [4, 4], [3, 3], [2, 2], [1, 1], [0, 0]])
+          end
+        end
+      end
+    end
+    describe 'when there is one or more pieces in front of it' do
+      describe 'when its on the center' do
+        before do
+          board[4][4] = bishop_black
+          board[6][6] = pawn_black
+          board[0][0] = pawn_black
+          board[5][3] = pawn_black
+          board[1][7] = pawn_black
+        end
+        it 'returns the possible moves' do
+          expect(bishop_moves(board, [4, 4], 'black')).to eql([[5, 5], [3, 3], [2, 2], [1, 1], [3, 5], [2, 6]])
+        end
+      end
+      describe 'when its in the left down corner' do
+        before do
+          board[0][0] = bishop_black
+          board[4][4] = pawn_black
+        end
+        it 'returns the possible moves' do
+          expect(bishop_moves(board, [0, 0], 'black')).to eql([[1, 1], [2, 2], [3, 3]])
+        end
+      end
+      describe 'when its in the right down corner' do
+        before do
+          board[0][7] = bishop_black
+          board[4][3] = pawn_black
+        end
+        it 'returns the possible moves' do
+          expect(bishop_moves(board, [0, 7], 'black')).to eql([[1, 6], [2, 5], [3, 4]])
+        end
+      end
+      describe 'when its in the left up corner' do
+        before do
+          board[7][0] = bishop_black
+          board[3][4] = pawn_black
+        end
+        it 'returns the possible moves' do
+          expect(bishop_moves(board, [7, 0], 'black')).to eql([[6, 1], [5, 2], [4, 3]])
+        end
+      end
+      describe 'when its in the right up corner' do
+        before do
+          board[7][7] = bishop_black
+          board[3][3] = pawn_black
+        end
+        it 'returns the possible moves' do
+          expect(bishop_moves(board, [7, 7], 'black')).to eql([[6, 6], [5, 5], [4, 4]])
+        end
+      end
+    end
+  end
 end
