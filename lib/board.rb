@@ -16,8 +16,9 @@ class Board
   end
 
   def move_piece(start_pos, end_pos)
-    raise "There is no piece at start_pos" if self[start_pos].nil?
-    raise "There is already a piece at end_pos" unless self[end_pos].nil?
+    raise 'There is no piece at start_pos' if self[start_pos].nil?
+    raise 'There is already a piece at end_pos' unless self[end_pos].nil?
+
     self[end_pos] = self[start_pos]
     self[start_pos] = nil
   end
@@ -27,12 +28,14 @@ class Board
   end
 
   def add_piece(piece, pos)
-    raise "position not empty" unless self[pos].nil?
+    raise 'position not empty' unless self[pos].nil?
+
     self[pos] = piece
   end
 
   def remove_piece(pos)
-    raise "position empty" if self[pos].nil?
+    raise 'position empty' if self[pos].nil?
+
     self[pos] = nil
   end
 end
