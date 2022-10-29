@@ -8,88 +8,130 @@ module PiecesMoves
   # if it is in front of it, but in the diagonal it should be able to move there
   def pawn_moves(board, from, color)
     return [] if from[0] == 7 && color == 'white'
-    return [] if from[0] == 0 && color == 'black'
+    return [] if from[0].zero? && color == 'black'
 
+    pos_x, pos_y = from
     possible_moves = []
     if color == 'white'
-      # it should use black_pieces to check if there is a piece in front of it
-      possible_moves << [from[0] + 1, from[1]] if board[from[0] + 1][from[1]] == ' '
-      possible_moves << [from[0] + 2, from[1]] if from[0] == 1 && board[from[0] + 2][from[1]] == ' '
-      possible_moves << [from[0] + 1, from[1] - 1] if from[1] != 0 && black_pieces.include?(board[from[0] + 1][from[1] - 1])
-      possible_moves << [from[0] + 1, from[1] + 1] if from[1] != 7 && black_pieces.include?(board[from[0] + 1][from[1] + 1])
+      possible_moves += pawn_white_towards_helper(board, pos_x, pos_y)
+      possible_moves += pawn_white_diagonal_helper(board, pos_x, pos_y)
     else
-      # it should use white_pieces to check if there is a piece in front of it
-      possible_moves << [from[0] - 1, from[1]] if board[from[0] - 1][from[1]] == ' '
-      possible_moves << [from[0] - 2, from[1]] if from[0] == 6 && board[from[0] - 2][from[1]] == ' '
-      possible_moves << [from[0] - 1, from[1] - 1] if from[1] != 0 && white_pieces.include?(board[from[0] - 1][from[1] - 1])
-      possible_moves << [from[0] - 1, from[1] + 1] if from[1] != 7 && white_pieces.include?(board[from[0] - 1][from[1] + 1])
+      possible_moves += pawn_black_towards_helper(board, pos_x, pos_y)
+      possible_moves += pawn_black_diagonal_helper(board, pos_x, pos_y)
     end
     possible_moves
   end
 
   def rook_moves(board, from, color)
-    x, y = from
+    pos_x, pos_y = from
+    possible_moves = []
+    possible_moves += rook_horizontal_helper(board, pos_x, pos_y, color)
+    possible_moves += rook_vertical_helper(board, pos_x, pos_y, color)
+    possible_moves
+  end
+
+  private
+
+  def pawn_white_towards_helper(board, pos_x, pos_y)
+    possible_moves = []
+    possible_moves << [pos_x + 1, pos_y] if board[pos_x + 1][pos_y] == ' '
+    possible_moves << [pos_x + 2, pos_y] if pos_x == 1 && board[pos_x + 2][pos_y] == ' '
+    possible_moves
+  end
+
+  def pawn_black_towards_helper(board, pos_x, pos_y)
+    possible_moves = []
+    possible_moves << [pos_x - 1, pos_y] if board[pos_x - 1][pos_y] == ' '
+    possible_moves << [pos_x - 2, pos_y] if pos_x == 6 && board[pos_x - 2][pos_y] == ' '
+    possible_moves
+  end
+
+  def pawn_white_diagonal_helper(board, pos_x, pos_y)
+    possible_moves = []
+    possible_moves << [pos_x + 1, pos_y - 1] if pos_y != 0 && black_pieces.include?(board[pos_x + 1][pos_y - 1])
+    possible_moves << [pos_x + 1, pos_y + 1] if pos_y != 7 && black_pieces.include?(board[pos_x + 1][pos_y + 1])
+    possible_moves
+  end
+
+  def pawn_black_diagonal_helper(board, pos_x, pos_y)
+    possible_moves = []
+    possible_moves << [pos_x - 1, pos_y - 1] if pos_y != 0 && white_pieces.include?(board[pos_x - 1][pos_y - 1])
+    possible_moves << [pos_x - 1, pos_y + 1] if pos_y != 7 && white_pieces.include?(board[pos_x - 1][pos_y + 1])
+    possible_moves
+  end
+
+  def rook_horizontal_helper(board, pos_x, pos_y, color)
     moves = []
-    moves += rook_horizontal_moves(board, x, y, color)
-    moves += rook_vertical_moves(board, x, y, color)
+    moves += rook_east_helper(board, pos_x, pos_y, color)
+    moves += rook_west_helper(board, pos_x, pos_y, color)
     moves
   end
 
-  def rook_horizontal_moves(board, x, y, color)
+  def rook_vertical_helper(board, pos_x, pos_y, color)
     moves = []
-    (y + 1).upto(7) do |i|
-      if board[x][i] == ' '
-        moves << [x, i]
-      elsif white_pieces.include?(board[x][i]) && color == 'black'
-        moves << [x, i]
-        break
-      elsif black_pieces.include?(board[x][i]) && color == 'white'
-        moves << [x, i]
-        break
-      else
+    moves += rook_north_helper(board, pos_x, pos_y, color)
+    moves += rook_south_helper(board, pos_x, pos_y, color)
+    moves
+  end
+
+  def rook_north_helper(board, pos_x, pos_y, color)
+    moves = []
+    (pos_x + 1).upto(7) do |i|
+      moves << [i, pos_y] if board[i][pos_y] == ' '
+      if white_pieces.include?(board[i][pos_y])
+        moves << [i, pos_y] if color == 'black'
         break
       end
-    end
-    (y - 1).downto(0) do |i|
-      if board[x][i] == ' '
-        moves << [x, i]
-      elsif white_pieces.include?(board[x][i]) && color == 'black'
-        moves << [x, i]
-        break
-      elsif black_pieces.include?(board[x][i]) && color == 'white'
-        moves << [x, i]
-        break
-      else
+      if black_pieces.include?(board[i][pos_y])
+        moves << [i, pos_y] if color == 'white'
         break
       end
     end
     moves
   end
-  def rook_vertical_moves(board, x, y, color)
+
+  def rook_south_helper(board, pos_x, pos_y, color)
     moves = []
-    (x + 1).upto(7) do |i|
-      if board[i][y] == ' '
-        moves << [i, y]
-      elsif white_pieces.include?(board[i][y]) && color == 'black'
-        moves << [i, y]
+    (pos_x - 1).downto(0) do |i|
+      moves << [i, pos_y] if board[i][pos_y] == ' '
+      if white_pieces.include?(board[i][pos_y])
+        moves << [i, pos_y] if color == 'black'
         break
-      elsif black_pieces.include?(board[i][y]) && color == 'white'
-        moves << [i, y]
-        break
-      else
+      end
+      if black_pieces.include?(board[i][pos_y])
+        moves << [i, pos_y] if color == 'white'
         break
       end
     end
-    (x - 1).downto(0) do |i|
-      if board[i][y] == ' '
-        moves << [i, y]
-      elsif white_pieces.include?(board[i][y]) && color == 'black'
-        moves << [i, y]
+    moves
+  end
+
+  def rook_east_helper(board, pos_x, pos_y, color)
+    moves = []
+    (pos_y + 1).upto(7) do |i|
+      moves << [pos_x, i] if board[pos_x][i] == ' '
+      if white_pieces.include?(board[pos_x][i])
+        moves << [pos_x, i] if color == 'black'
         break
-      elsif black_pieces.include?(board[i][y]) && color == 'white'
-        moves << [i, y]
+      end
+      if black_pieces.include?(board[pos_x][i])
+        moves << [pos_x, i] if color == 'white'
         break
-      else
+      end
+    end
+    moves
+  end
+
+  def rook_west_helper(board, pos_x, pos_y, color)
+    moves = []
+    (pos_y - 1).downto(0) do |i|
+      moves << [pos_x, i] if board[pos_x][i] == ' '
+      if white_pieces.include?(board[pos_x][i])
+        moves << [pos_x, i] if color == 'black'
+        break
+      end
+      if black_pieces.include?(board[pos_x][i])
+        moves << [pos_x, i] if color == 'white'
         break
       end
     end

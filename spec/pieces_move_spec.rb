@@ -5,7 +5,6 @@ describe PiecesMoves do
   include PiecesMoves
   include Pieces
 
-  # create a board of arrays with 0 in each position
   let(:board) { Array.new(8) { Array.new(8, ' ') } }
 
   describe '#pawn_moves' do
@@ -163,7 +162,8 @@ describe PiecesMoves do
               board[4][2] = pawn_white
             end
             it 'returns the possible moves' do
-              expect(rook_moves(board, [4, 3], 'white')).to eql([[5, 3], [6, 3], [7, 3], [3, 3], [2, 3], [1, 3], [0, 3]])
+              expect(rook_moves(board, [4, 3],
+                                'white')).to eql([[5, 3], [6, 3], [7, 3], [3, 3], [2, 3], [1, 3], [0, 3]])
             end
           end
           describe 'when there is a piece in front of it' do
@@ -185,7 +185,8 @@ describe PiecesMoves do
               board[4][5] = pawn_black
             end
             it 'returns the possible moves' do
-              expect(rook_moves(board, [4, 3], 'white')).to eql([[5, 3], [6, 3], [7, 3], [3, 3], [2, 3], [1, 3], [0, 3]])
+              expect(rook_moves(board, [4, 3],
+                                'white')).to eql([[5, 3], [6, 3], [7, 3], [3, 3], [2, 3], [1, 3], [0, 3]])
             end
           end
         end
@@ -229,7 +230,8 @@ describe PiecesMoves do
               board[2][4] = pawn_white
             end
             it 'returns the possible moves' do
-              expect(rook_moves(board, [3, 4], 'white')).to eql([[3, 5], [3, 6], [3, 7], [3, 3], [3, 2], [3, 1], [3, 0]])
+              expect(rook_moves(board, [3, 4],
+                                'white')).to eql([[3, 5], [3, 6], [3, 7], [3, 3], [3, 2], [3, 1], [3, 0]])
             end
           end
           describe 'when there is a piece in front of it' do
