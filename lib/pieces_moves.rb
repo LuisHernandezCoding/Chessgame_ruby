@@ -2,10 +2,6 @@ require_relative 'pieces'
 
 module PiecesMoves
   extend Pieces
-  # gets board and position of the piece & returns an array of possible moves
-  # it should have in consideration the pieces in the board and the color of the piece
-  # for example, if the piece is a white pawn, it should not be able to move to a black piece
-  # if it is in front of it, but in the diagonal it should be able to move there
   def pawn_moves(board, from, color)
     return [] if from[0] == 7 && color == 'white'
     return [] if from[0].zero? && color == 'black'
@@ -28,6 +24,20 @@ module PiecesMoves
     possible_moves += rook_horizontal_helper(board, pos_x, pos_y, color)
     possible_moves += rook_vertical_helper(board, pos_x, pos_y, color)
     possible_moves
+  end
+
+  def debug_print(board, possible_moves)
+    puts
+    p '-----------------------------'
+    board.map { |row| p row.join(' | ') }
+    p '-----------------------------'
+    moves = possible_moves
+    mapped_board = board.map.with_index do |row, i|
+      row.map.with_index do |col, j|
+        moves.include?([i, j]) ? 'X' : col
+      end
+    end
+    mapped_board.map { |row| p row.join(' | ') }
   end
 
   private
