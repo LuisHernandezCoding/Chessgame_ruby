@@ -36,6 +36,16 @@ module PiecesMoves
     possible_moves
   end
 
+  def knight_moves(board, from, color)
+    pos_x, pos_y = from
+    possible_moves = []
+    possible_moves += knight_north_helper(board, pos_x, pos_y, color)
+    possible_moves += knight_west_helper(board, pos_x, pos_y, color)
+    possible_moves += knight_south_helper(board, pos_x, pos_y, color)
+    possible_moves += knight_east_helper(board, pos_x, pos_y, color)
+    possible_moves
+  end
+
   def debug_print(board, possible_moves)
     puts
     p '-----------------------------'
@@ -232,5 +242,52 @@ module PiecesMoves
       end
     end
     moves
+  end
+
+  def knight_north_helper(board, pos_x, pos_y, color)
+    moves = []
+    moves << [pos_x + 2, pos_y + 1]
+    moves << [pos_x + 2, pos_y - 1]
+    valid_moves(moves, board, color)
+  end
+
+  def knight_south_helper(board, pos_x, pos_y, color)
+    moves = []
+    moves << [pos_x - 2, pos_y + 1]
+    moves << [pos_x - 2, pos_y - 1]
+    valid_moves(moves, board, color)
+  end
+
+  def knight_east_helper(board, pos_x, pos_y, color)
+    moves = []
+    moves << [pos_x + 1, pos_y + 2]
+    moves << [pos_x - 1, pos_y + 2]
+    valid_moves(moves, board, color)
+  end
+
+  def knight_west_helper(board, pos_x, pos_y, color)
+    moves = []
+    moves << [pos_x + 1, pos_y - 2]
+    moves << [pos_x - 1, pos_y - 2]
+    valid_moves(moves, board, color)
+  end
+
+  def valid_moves(moves, board, color)
+    valid_moves = []
+    moves.each do |move|
+      next unless inside_board?(move)
+
+      valid_moves << move if board[move[0]][move[1]] == ' '
+      if color == 'white'
+        valid_moves << move if black_pieces.include?(board[move[0]][move[1]])
+      elsif white_pieces.include?(board[move[0]][move[1]])
+        valid_moves << move
+      end
+    end
+    valid_moves
+  end
+
+  def inside_board?(move)
+    return true if move[0].between?(0, 7) && move[1].between?(0, 7)
   end
 end

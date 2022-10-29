@@ -600,4 +600,338 @@ describe PiecesMoves do
       end
     end
   end
+
+  describe '#knight_moves' do
+    describe 'when the knight is white' do
+      describe 'when there is no piece in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = knight_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [4, 4],
+                                'white')).to eql([[6, 5], [6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = knight_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 0],
+                                'white')).to eql([[2, 1], [1, 2]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = knight_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 7],
+                                'white')).to eql([[2, 6], [1, 5]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = knight_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 0],
+                                'white')).to eql([[5, 1], [6, 2]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = knight_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 7],
+                                'white')).to eql([[6, 5], [5, 6]])
+          end
+        end
+      end
+      describe 'when there is one or more pieces in front of it' do
+        describe 'when its on the center' do
+          describe 'when there is one piece in front of it' do
+            before do
+              board[4][4] = knight_white
+              board[6][5] = pawn_black
+            end
+            it 'returns the possible moves' do
+              expect(knight_moves(board, [4, 4],
+                                  'white')).to eql([[6, 5], [6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+            end
+          end
+          describe 'when there are two pieces in front of it' do
+            before do
+              board[4][4] = knight_white
+              board[6][5] = pawn_black
+              board[6][3] = pawn_black
+            end
+            it 'returns the possible moves' do
+              expect(knight_moves(board, [4, 4],
+                                  'white')).to eql([[6, 5], [6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+            end
+          end
+          describe 'when there are three pieces in front of it' do
+            before do
+              board[4][4] = knight_white
+              board[6][5] = pawn_black
+              board[6][3] = pawn_black
+              board[5][2] = pawn_black
+            end
+            it 'returns the possible moves' do
+              expect(knight_moves(board, [4, 4],
+                                  'white')).to eql([[6, 5], [6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+            end
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = knight_white
+            board[2][1] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 0],
+                                'white')).to eql([[2, 1], [1, 2]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = knight_white
+            board[2][6] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 7],
+                                'white')).to eql([[2, 6], [1, 5]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = knight_white
+            board[5][1] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 0],
+                                'white')).to eql([[5, 1], [6, 2]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = knight_white
+            board[6][5] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 7],
+                                'white')).to eql([[6, 5], [5, 6]])
+          end
+        end
+      end
+      describe 'when there is a piece of the same color in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = knight_white
+            board[6][5] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [4, 4],
+                                'white')).to eql([[6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = knight_white
+            board[2][1] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 0],
+                                'white')).to eql([[1, 2]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = knight_white
+            board[2][6] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 7],
+                                'white')).to eql([[1, 5]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = knight_white
+            board[5][1] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 0],
+                                'white')).to eql([[6, 2]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = knight_white
+            board[6][5] = pawn_white
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 7],
+                                'white')).to eql([[5, 6]])
+          end
+        end
+      end
+    end
+    describe 'when the knight is black' do
+      describe 'when there is no piece in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = knight_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [4, 4],
+                                'black')).to eql([[6, 5], [6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = knight_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 0],
+                                'black')).to eql([[2, 1], [1, 2]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = knight_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 7],
+                                'black')).to eql([[2, 6], [1, 5]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = knight_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 0],
+                                'black')).to eql([[5, 1], [6, 2]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = knight_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 7],
+                                'black')).to eql([[6, 5], [5, 6]])
+          end
+        end
+      end
+      describe 'when there is one or more pieces in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = knight_black
+            board[6][5] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [4, 4],
+                                'black')).to eql([[6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = knight_black
+            board[2][1] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 0],
+                                'black')).to eql([[1, 2]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = knight_black
+            board[2][6] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 7],
+                                'black')).to eql([[1, 5]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = knight_black
+            board[5][1] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 0],
+                                'black')).to eql([[6, 2]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = knight_black
+            board[6][5] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 7],
+                                'black')).to eql([[5, 6]])
+          end
+        end
+      end
+      describe 'when there is a piece of the same color in front of it' do
+        describe 'when its on the center' do
+          before do
+            board[4][4] = knight_black
+            board[6][5] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [4, 4],
+                                'black')).to eql([[6, 3], [5, 2], [3, 2], [2, 5], [2, 3], [5, 6], [3, 6]])
+          end
+        end
+        describe 'when its in the left down corner' do
+          before do
+            board[0][0] = knight_black
+            board[2][1] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 0],
+                                'black')).to eql([[1, 2]])
+          end
+        end
+        describe 'when its in the right down corner' do
+          before do
+            board[0][7] = knight_black
+            board[2][6] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [0, 7],
+                                'black')).to eql([[1, 5]])
+          end
+        end
+        describe 'when its in the left up corner' do
+          before do
+            board[7][0] = knight_black
+            board[5][1] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 0],
+                                'black')).to eql([[6, 2]])
+          end
+        end
+        describe 'when its in the right up corner' do
+          before do
+            board[7][7] = knight_black
+            board[6][5] = pawn_black
+          end
+          it 'returns the possible moves' do
+            expect(knight_moves(board, [7, 7],
+                                'black')).to eql([[5, 6]])
+          end
+        end
+      end
+    end
+  end
 end
