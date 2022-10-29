@@ -43,7 +43,7 @@ describe Board do
     describe 'when there is no piece at the start position' do
       it 'raises an error' do
         board = Board.new
-        expect { board.move_piece([0, 0], [1, 1]) }.to raise_error("There is no piece at start_pos")
+        expect { board.move_piece([0, 0], [1, 1]) }.to raise_error('There is no piece at start_pos')
       end
     end
     describe 'when there is already a piece at the end position' do
@@ -51,11 +51,11 @@ describe Board do
         board = Board.new
         board[[0, 0]] = :piece
         board[[1, 1]] = :piece
-        expect { board.move_piece([0, 0], [1, 1]) }.to raise_error("There is already a piece at end_pos")
+        expect { board.move_piece([0, 0], [1, 1]) }.to raise_error('There is already a piece at end_pos')
       end
     end
   end
-  
+
   describe '#valid_pos?' do
     describe 'when given a position' do
       it 'returns true if the position is on the board' do
