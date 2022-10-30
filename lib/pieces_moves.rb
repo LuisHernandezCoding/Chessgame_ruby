@@ -46,6 +46,18 @@ module PiecesMoves
     possible_moves
   end
 
+  def queen_moves(board, from, color)
+    pos_x, pos_y = from
+    possible_moves = []
+    possible_moves += rook_horizontal_helper(board, pos_x, pos_y, color)
+    possible_moves += rook_vertical_helper(board, pos_x, pos_y, color)
+    possible_moves += bishop_north_east_helper(board, pos_x, pos_y, color)
+    possible_moves += bishop_south_west_helper(board, pos_x, pos_y, color)
+    possible_moves += bishop_north_west_helper(board, pos_x, pos_y, color)
+    possible_moves += bishop_south_east_helper(board, pos_x, pos_y, color)
+    possible_moves.uniq
+  end
+
   def debug_print(board, possible_moves)
     puts
     p '-----------------------------'
