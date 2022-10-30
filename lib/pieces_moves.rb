@@ -58,6 +58,13 @@ module PiecesMoves
     possible_moves.uniq
   end
 
+  def king_moves(board, from, color)
+    pos_x, pos_y = from
+    possible_moves = []
+    possible_moves += king_helper(board, pos_x, pos_y, color)
+    possible_moves
+  end
+
   def debug_print(board, possible_moves)
     puts
     p '-----------------------------'
@@ -281,6 +288,19 @@ module PiecesMoves
     moves = []
     moves << [pos_x + 1, pos_y - 2]
     moves << [pos_x - 1, pos_y - 2]
+    valid_moves(moves, board, color)
+  end
+
+  def king_helper(board, pos_x, pos_y, color)
+    moves = []
+    moves << [pos_x + 1, pos_y]
+    moves << [pos_x - 1, pos_y]
+    moves << [pos_x, pos_y + 1]
+    moves << [pos_x, pos_y - 1]
+    moves << [pos_x + 1, pos_y + 1]
+    moves << [pos_x + 1, pos_y - 1]
+    moves << [pos_x - 1, pos_y + 1]
+    moves << [pos_x - 1, pos_y - 1]
     valid_moves(moves, board, color)
   end
 
