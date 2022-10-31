@@ -25,6 +25,23 @@ module Pieces
   def king_white_rotated; '🨉'; end
   def king_black_rotated; '🨏'; end
 
+  def getting_rotated_pieces(piece)
+    case piece
+    when pawn_white then pawn_white_rotated
+    when pawn_black then pawn_black_rotated
+    when rook_white then rook_white_rotated
+    when rook_black then rook_black_rotated
+    when knight_white then knight_white_rotated
+    when knight_black then knight_black_rotated
+    when bishop_white then bishop_white_rotated
+    when bishop_black then bishop_black_rotated
+    when queen_white then queen_white_rotated
+    when queen_black then queen_black_rotated
+    when king_white then king_white_rotated
+    when king_black then king_black_rotated
+    end
+  end
+
   def white_pieces
     [pawn_white, rook_white, knight_white, bishop_white, queen_white, king_white]
   end

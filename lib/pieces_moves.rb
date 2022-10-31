@@ -3,8 +3,8 @@ require_relative 'pieces'
 module PiecesMoves
   extend Pieces
   def pawn_moves(board, from, color)
-    return [] if from[0] == 7 && color == 'white'
-    return [] if from[0].zero? && color == 'black'
+    return [] if from[0].zero? && color == 'white'
+    return [] if from[0] == 7 && color == 'black'
 
     pos_x, pos_y = from
     possible_moves = []
@@ -65,48 +65,33 @@ module PiecesMoves
     possible_moves
   end
 
-  def debug_print(board, possible_moves = [])
-    p '   _0___1___2___3___4___5___6___7_ '
-    board.map.with_index { |row, index| p "#{index} |_#{row.join('_|_')}_|" }
-    p '-----------------------------'
-    return if possible_moves.empty?
-
-    p '   _0___1___2___3___4___5___6___7_ '
-    mapped_board = board.map.with_index do |row, i|
-      row.map.with_index do |col, j|
-        possible_moves.include?([i, j]) ? 'X' : col
-      end
-    end
-    mapped_board.map.with_index { |row, index| p "#{index} |_#{row.join('_|_')}_|" }
-  end
-
   private
 
-  def pawn_white_towards_helper(board, pos_x, pos_y)
+  def pawn_black_towards_helper(board, pos_x, pos_y)
     possible_moves = []
     possible_moves << [pos_x + 1, pos_y] if board[pos_x + 1][pos_y] == ' '
     possible_moves << [pos_x + 2, pos_y] if pos_x == 1 && board[pos_x + 2][pos_y] == ' '
     possible_moves
   end
 
-  def pawn_black_towards_helper(board, pos_x, pos_y)
+  def pawn_white_towards_helper(board, pos_x, pos_y)
     possible_moves = []
     possible_moves << [pos_x - 1, pos_y] if board[pos_x - 1][pos_y] == ' '
     possible_moves << [pos_x - 2, pos_y] if pos_x == 6 && board[pos_x - 2][pos_y] == ' '
     possible_moves
   end
 
-  def pawn_white_diagonal_helper(board, pos_x, pos_y)
+  def pawn_black_diagonal_helper(board, pos_x, pos_y)
     possible_moves = []
-    possible_moves << [pos_x + 1, pos_y - 1] if pos_y != 0 && black_pieces.include?(board[pos_x + 1][pos_y - 1])
-    possible_moves << [pos_x + 1, pos_y + 1] if pos_y != 7 && black_pieces.include?(board[pos_x + 1][pos_y + 1])
+    possible_moves << [pos_x + 1, pos_y - 1] if pos_y != 0 && white_pieces.include?(board[pos_x + 1][pos_y - 1])
+    possible_moves << [pos_x + 1, pos_y + 1] if pos_y != 7 && white_pieces.include?(board[pos_x + 1][pos_y + 1])
     possible_moves
   end
 
-  def pawn_black_diagonal_helper(board, pos_x, pos_y)
+  def pawn_white_diagonal_helper(board, pos_x, pos_y)
     possible_moves = []
-    possible_moves << [pos_x - 1, pos_y - 1] if pos_y != 0 && white_pieces.include?(board[pos_x - 1][pos_y - 1])
-    possible_moves << [pos_x - 1, pos_y + 1] if pos_y != 7 && white_pieces.include?(board[pos_x - 1][pos_y + 1])
+    possible_moves << [pos_x - 1, pos_y - 1] if pos_y != 0 && black_pieces.include?(board[pos_x - 1][pos_y - 1])
+    possible_moves << [pos_x - 1, pos_y + 1] if pos_y != 7 && black_pieces.include?(board[pos_x - 1][pos_y + 1])
     possible_moves
   end
 

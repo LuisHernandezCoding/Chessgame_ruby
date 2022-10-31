@@ -1,8 +1,8 @@
 class Board
   attr_reader :grid
 
-  def initialize
-    @grid = Array.new(8) { Array.new(8) }
+  def initialize(grid = Array.new(8) { Array.new(8, ' ') })
+    @grid = grid
   end
 
   def [](pos)
@@ -16,11 +16,11 @@ class Board
   end
 
   def move_piece(start_pos, end_pos)
-    raise 'There is no piece at start_pos' if self[start_pos].nil?
-    raise 'There is already a piece at end_pos' unless self[end_pos].nil?
+    raise 'There is no piece at start_pos' if self[start_pos] == ' '
+    raise 'There is already a piece at end_pos' unless self[end_pos] == ' '
 
     self[end_pos] = self[start_pos]
-    self[start_pos] = nil
+    self[start_pos] = ' '
   end
 
   def valid_pos?(pos)
@@ -28,14 +28,14 @@ class Board
   end
 
   def add_piece(piece, pos)
-    raise 'position not empty' unless self[pos].nil?
+    raise 'position not empty' unless self[pos] == ' '
 
     self[pos] = piece
   end
 
   def remove_piece(pos)
-    raise 'position empty' if self[pos].nil?
+    raise 'position empty' if self[pos] == ' '
 
-    self[pos] = nil
+    self[pos] = ' '
   end
 end

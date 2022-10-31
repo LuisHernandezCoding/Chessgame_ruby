@@ -11,55 +11,54 @@ describe PiecesMoves do
     describe 'when its white pawn' do
       describe 'when its in the first row' do
         before do
-          include Pieces
-          board[1][3] = pawn_white
+          board[6][3] = pawn_white
         end
         it 'returns the possible moves' do
-          expect(pawn_moves(board, [1, 3], 'white')).to eql([[2, 3], [3, 3]])
+          expect(pawn_moves(board, [6, 3], 'white')).to eql([[5, 3], [4, 3]])
         end
       end
       describe 'when its in the second row' do
         before do
-          board[2][3] = pawn_white
+          board[5][3] = pawn_white
         end
         it 'returns the possible moves' do
-          expect(pawn_moves(board, [2, 3], 'white')).to eql([[3, 3]])
+          expect(pawn_moves(board, [5, 3], 'white')).to eql([[4, 3]])
         end
       end
       describe 'when its in the last row' do
         before do
-          board[7][3] = pawn_white
+          board[0][3] = pawn_white
         end
         it 'returns the possible moves' do
-          expect(pawn_moves(board, [7, 3], 'white')).to eql([])
+          expect(pawn_moves(board, [0, 3], 'white')).to eql([])
         end
       end
       describe 'when its in the middle row' do
         describe 'when there is no piece in front of it' do
           before do
-            board[4][3] = pawn_white
+            board[3][3] = pawn_white
           end
           it 'returns the possible moves' do
-            expect(pawn_moves(board, [4, 3], 'white')).to eql([[5, 3]])
+            expect(pawn_moves(board, [3, 3], 'white')).to eql([[2, 3]])
           end
         end
         describe 'when there is a piece in front of it' do
           before do
-            board[4][3] = pawn_white
-            board[5][3] = pawn_black
+            board[3][3] = pawn_white
+            board[2][3] = pawn_black
           end
           it 'returns the possible moves' do
-            expect(pawn_moves(board, [4, 3], 'white')).to eql([])
+            expect(pawn_moves(board, [3, 3], 'white')).to eql([])
           end
         end
         describe 'when there is a piece in front of it and in the diagonal' do
           before do
-            board[4][3] = pawn_white
-            board[5][3] = pawn_black
-            board[5][2] = pawn_black
+            board[3][3] = pawn_white
+            board[2][3] = pawn_black
+            board[2][2] = pawn_black
           end
           it 'returns the possible moves' do
-            expect(pawn_moves(board, [4, 3], 'white')).to eql([[5, 2]])
+            expect(pawn_moves(board, [3, 3], 'white')).to eql([[2, 2]])
           end
         end
       end
@@ -67,54 +66,55 @@ describe PiecesMoves do
     describe 'when its black pawn' do
       describe 'when its in the first row' do
         before do
-          board[6][3] = pawn_black
+          include Pieces
+          board[1][3] = pawn_black
         end
         it 'returns the possible moves' do
-          expect(pawn_moves(board, [6, 3], 'black')).to eql([[5, 3], [4, 3]])
+          expect(pawn_moves(board, [1, 3], 'black')).to eql([[2, 3], [3, 3]])
         end
       end
       describe 'when its in the second row' do
         before do
-          board[5][3] = pawn_black
+          board[2][3] = pawn_black
         end
         it 'returns the possible moves' do
-          expect(pawn_moves(board, [5, 3], 'black')).to eql([[4, 3]])
+          expect(pawn_moves(board, [2, 3], 'black')).to eql([[3, 3]])
         end
       end
       describe 'when its in the last row' do
         before do
-          board[0][3] = pawn_black
+          board[7][3] = pawn_black
         end
         it 'returns the possible moves' do
-          expect(pawn_moves(board, [0, 3], 'black')).to eql([])
+          expect(pawn_moves(board, [7, 3], 'black')).to eql([])
         end
       end
       describe 'when its in the middle row' do
         describe 'when there is no piece in front of it' do
           before do
-            board[3][3] = pawn_black
+            board[4][3] = pawn_black
           end
           it 'returns the possible moves' do
-            expect(pawn_moves(board, [3, 3], 'black')).to eql([[2, 3]])
+            expect(pawn_moves(board, [4, 3], 'black')).to eql([[5, 3]])
           end
         end
         describe 'when there is a piece in front of it' do
           before do
-            board[3][3] = pawn_black
-            board[2][3] = pawn_white
+            board[4][3] = pawn_black
+            board[5][3] = pawn_white
           end
           it 'returns the possible moves' do
-            expect(pawn_moves(board, [3, 3], 'black')).to eql([])
+            expect(pawn_moves(board, [4, 3], 'black')).to eql([])
           end
         end
         describe 'when there is a piece in front of it and in the diagonal' do
           before do
-            board[3][3] = pawn_black
-            board[2][3] = pawn_white
-            board[2][2] = pawn_white
+            board[4][3] = pawn_black
+            board[5][3] = pawn_white
+            board[5][2] = pawn_white
           end
           it 'returns the possible moves' do
-            expect(pawn_moves(board, [3, 3], 'black')).to eql([[2, 2]])
+            expect(pawn_moves(board, [4, 3], 'black')).to eql([[5, 2]])
           end
         end
       end

@@ -15,7 +15,7 @@ describe Board do
     describe 'when given a position' do
       it 'returns the piece at that position' do
         board = Board.new
-        expect(board[[0, 0]]).to be_nil
+        expect(board[[0, 0]]).to eq(' ')
       end
     end
   end
@@ -36,7 +36,7 @@ describe Board do
         board = Board.new
         board[[0, 0]] = :piece
         board.move_piece([0, 0], [1, 1])
-        expect(board[[0, 0]]).to be_nil
+        expect(board[[0, 0]]).to eq(' ')
         expect(board[[1, 1]]).to eq(:piece)
       end
     end
@@ -85,7 +85,7 @@ describe Board do
         board = Board.new
         board[[0, 0]] = :piece
         board.remove_piece([0, 0])
-        expect(board[[0, 0]]).to be_nil
+        expect(board[[0, 0]]).to eq(' ')
       end
     end
   end

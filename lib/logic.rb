@@ -24,6 +24,14 @@ module Logic
     king_pos = find_king(board, color)
     return false if king_pos.nil?
 
+    return true if check_king?(board, color, king_pos) && check_pieces?(board, color)
+
+    false
+  end
+
+  private
+
+  def check_king?(board, color, king_pos)
     king_moves = king_moves(board, king_pos, color)
     king_moves.each do |move|
       new_board = board.map(&:clone)
@@ -34,7 +42,27 @@ module Logic
     true
   end
 
-  private
+  def check_pieces?(board, color)
+    board.each_with_index do |row, row_index|
+      row.each_with_index do |piece, col_index|
+        own_pieces = get_own_pieces(color)
+        next unless own_pieces.include?(piece)
+
+        moves = piece_moves(board, [row_index, col_index])
+        moves.each do |move|
+          new_board = board.map(&:clone)
+          new_board[row_index][col_index] = ' '
+          new_board[move[0]][move[1]] = piece
+          return false unless check?(new_board, color)
+        end
+      end
+    end
+    true
+  end
+
+  def get_own_pieces(color)
+    color == 'white' ? white_pieces : black_pieces
+  end
 
   def find_king(board, color)
     board.each_with_index do |row, row_index|

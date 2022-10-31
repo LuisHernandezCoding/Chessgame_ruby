@@ -22,7 +22,7 @@ describe Logic do
       describe 'and the king is in check' do
         before do
           board[4][4] = king_white
-          board[5][5] = pawn_black
+          board[3][3] = pawn_black
         end
         it 'returns true' do
           expect(check?(board, 'white')).to eql(true)
@@ -77,7 +77,7 @@ describe Logic do
       describe 'and the king is in check' do
         before do
           board[4][4] = king_black
-          board[3][3] = pawn_white
+          board[5][5] = pawn_white
         end
         it 'returns true' do
           expect(check?(board, 'black')).to eql(true)
@@ -190,10 +190,10 @@ describe Logic do
       describe 'and the king is in checkmate by pawns' do
         before do
           board[4][4] = king_white
-          board[6][4] = pawn_black
-          board[6][5] = pawn_black
-          board[5][2] = pawn_black
-          board[5][6] = pawn_black
+          board[2][4] = pawn_black
+          board[2][5] = pawn_black
+          board[3][2] = pawn_black
+          board[3][6] = pawn_black
           board[4][2] = pawn_black
           board[4][6] = pawn_black
           board[4][3] = pawn_black
@@ -308,14 +308,16 @@ describe Logic do
       describe 'and the king is in checkmate by pawns' do
         before do
           board[4][4] = king_black
-          board[2][4] = pawn_white
-          board[2][5] = pawn_white
-          board[3][2] = pawn_white
-          board[3][6] = pawn_white
+          board[6][4] = pawn_white
+          board[6][5] = pawn_white
+          board[5][2] = pawn_white
+          board[5][6] = pawn_white
           board[4][2] = pawn_white
           board[4][6] = pawn_white
           board[4][3] = pawn_white
           board[4][5] = pawn_white
+          board[6][3] = pawn_white
+          board[6][4] = pawn_white
         end
         it 'returns true' do
           expect(checkmate?(board, 'black')).to eql(true)
