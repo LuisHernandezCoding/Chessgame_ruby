@@ -287,7 +287,27 @@ module PiecesMoves
     moves << [pos_x + 1, pos_y - 1]
     moves << [pos_x - 1, pos_y + 1]
     moves << [pos_x - 1, pos_y - 1]
+    moves += castling_helper(board, color)
     valid_moves(moves, board, color)
+  end
+
+  def castling_helper(board, color)
+    if color == 'white'
+      actual_line = 7
+      actual_king = king_white
+      actual_rook = rook_white
+    else
+      actual_line = 0
+      actual_king = king_black
+      actual_rook = rook_black
+    end
+    moves = []
+    pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8 = board[actual_line]
+    moves << [actual_line, 6] if board[actual_line] == [pos1, pos2, pos3, pos4, actual_king, ' ', ' ', actual_rook]
+    moves << [actual_line, 5] if board[actual_line] == [pos1, pos2, pos3, actual_king, ' ', ' ', ' ', actual_rook]
+    moves << [actual_line, 1] if board[actual_line] == [actual_rook, ' ', ' ', actual_king, pos5, pos6, pos7, pos8]
+    moves << [actual_line, 2] if board[actual_line] == [actual_rook, ' ', ' ', ' ', actual_king, pos6, pos7, pos8]
+    moves
   end
 
   def valid_moves(moves, board, color)

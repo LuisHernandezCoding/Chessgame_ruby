@@ -1138,196 +1138,394 @@ describe PiecesMoves do
   end
 
   describe '#king_moves' do
-    describe 'when the king is white' do
-      describe 'when there is no piece in front of it' do
-        describe 'when its on the center' do
-          before do
-            board[4][4] = king_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[3, 3], [3, 4], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
-            expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
-          end
+    describe 'when there is no piece in front of it' do
+      describe 'when its on the center' do
+        before do
+          board[4][4] = king_white
         end
-        describe 'when its on the center but surrounded by white pieces' do
-          before do
-            board[4][4] = king_white
-            board[4][3] = pawn_white
-            board[5][4] = pawn_white
-            board[3][4] = pawn_white
-            board[4][6] = pawn_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[3, 3], [3, 5], [4, 5], [5, 3], [5, 5]]
-            expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the left down corner' do
-          before do
-            board[0][0] = king_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[0, 1], [1, 0], [1, 1]]
-            expect(king_moves(board, [0, 0], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the right down corner' do
-          before do
-            board[0][7] = king_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[0, 6], [1, 6], [1, 7]]
-            expect(king_moves(board, [0, 7], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the left up corner' do
-          before do
-            board[7][0] = king_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[6, 0], [6, 1], [7, 1]]
-            expect(king_moves(board, [7, 0], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the right up corner' do
-          before do
-            board[7][7] = king_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[6, 6], [6, 7], [7, 6]]
-            expect(king_moves(board, [7, 7], 'white')).to contain_exactly(*possible_moves)
-          end
+        it 'returns the possible moves' do
+          possible_moves = [[3, 3], [3, 4], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
+          expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
         end
       end
-      describe 'when there is a piece in front of it' do
-        describe 'when its on the center' do
-          before do
-            board[4][4] = king_white
-            board[3][3] = pawn_black
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[3, 3], [3, 4], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
-            expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
-          end
+      describe 'when its on the center but surrounded by white pieces' do
+        before do
+          board[4][4] = king_white
+          board[4][3] = pawn_white
+          board[5][4] = pawn_white
+          board[3][4] = pawn_white
+          board[4][6] = pawn_white
         end
-        describe 'when its on the center but surrounded by white pieces' do
-          before do
-            board[4][4] = king_white
-            board[4][3] = pawn_white
-            board[5][4] = pawn_white
-            board[3][4] = pawn_white
-            board[4][6] = pawn_white
-            board[3][3] = pawn_black
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[3, 3], [3, 5], [4, 5], [5, 3], [5, 5]]
-            expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the left down corner' do
-          before do
-            board[0][0] = king_white
-            board[0][1] = pawn_black
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[0, 1], [1, 0], [1, 1]]
-            expect(king_moves(board, [0, 0], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the right down corner' do
-          before do
-            board[0][7] = king_white
-            board[1][6] = pawn_black
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[0, 6], [1, 6], [1, 7]]
-            expect(king_moves(board, [0, 7], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the left up corner' do
-          before do
-            board[7][0] = king_white
-            board[6][1] = pawn_black
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[6, 0], [6, 1], [7, 1]]
-            expect(king_moves(board, [7, 0], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the right up corner' do
-          before do
-            board[7][7] = king_white
-            board[6][6] = pawn_black
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[6, 6], [6, 7], [7, 6]]
-            expect(king_moves(board, [7, 7], 'white')).to contain_exactly(*possible_moves)
-          end
+        it 'returns the possible moves' do
+          possible_moves = [[3, 3], [3, 5], [4, 5], [5, 3], [5, 5]]
+          expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
         end
       end
-      describe 'when there is a piece of the same color in front of it' do
-        describe 'when its on the center' do
-          before do
-            board[4][4] = king_white
-            board[3][3] = pawn_white
+      describe 'when its in the left down corner' do
+        before do
+          board[0][0] = king_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[0, 1], [1, 0], [1, 1]]
+          expect(king_moves(board, [0, 0], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the right down corner' do
+        before do
+          board[0][7] = king_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[0, 6], [1, 6], [1, 7]]
+          expect(king_moves(board, [0, 7], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the left up corner' do
+        before do
+          board[7][0] = king_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[6, 0], [6, 1], [7, 1]]
+          expect(king_moves(board, [7, 0], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the right up corner' do
+        before do
+          board[7][7] = king_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[6, 6], [6, 7], [7, 6]]
+          expect(king_moves(board, [7, 7], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+    end
+    describe 'when there is a piece in front of it' do
+      describe 'when its on the center' do
+        before do
+          board[4][4] = king_white
+          board[3][3] = pawn_black
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[3, 3], [3, 4], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
+          expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its on the center but surrounded by white pieces' do
+        before do
+          board[4][4] = king_white
+          board[4][3] = pawn_white
+          board[5][4] = pawn_white
+          board[3][4] = pawn_white
+          board[4][6] = pawn_white
+          board[3][3] = pawn_black
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[3, 3], [3, 5], [4, 5], [5, 3], [5, 5]]
+          expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the left down corner' do
+        before do
+          board[0][0] = king_white
+          board[0][1] = pawn_black
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[0, 1], [1, 0], [1, 1]]
+          expect(king_moves(board, [0, 0], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the right down corner' do
+        before do
+          board[0][7] = king_white
+          board[1][6] = pawn_black
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[0, 6], [1, 6], [1, 7]]
+          expect(king_moves(board, [0, 7], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the left up corner' do
+        before do
+          board[7][0] = king_white
+          board[6][1] = pawn_black
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[6, 0], [6, 1], [7, 1]]
+          expect(king_moves(board, [7, 0], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the right up corner' do
+        before do
+          board[7][7] = king_white
+          board[6][6] = pawn_black
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[6, 6], [6, 7], [7, 6]]
+          expect(king_moves(board, [7, 7], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+    end
+    describe 'when there is a piece of the same color in front of it' do
+      describe 'when its on the center' do
+        before do
+          board[4][4] = king_white
+          board[3][3] = pawn_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[3, 4], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
+          expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its on the center but surrounded by white pieces' do
+        before do
+          board[4][4] = king_white
+          board[4][3] = pawn_white
+          board[5][4] = pawn_white
+          board[3][4] = pawn_white
+          board[4][6] = pawn_white
+          board[3][3] = pawn_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[3, 5], [4, 5], [5, 3], [5, 5]]
+          expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the left down corner' do
+        before do
+          board[0][0] = king_white
+          board[0][1] = pawn_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[1, 0], [1, 1]]
+          expect(king_moves(board, [0, 0], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the right down corner' do
+        before do
+          board[0][7] = king_white
+          board[1][6] = pawn_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[0, 6], [1, 7]]
+          expect(king_moves(board, [0, 7], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the left up corner' do
+        before do
+          board[7][0] = king_white
+          board[6][1] = pawn_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[6, 0], [7, 1]]
+          expect(king_moves(board, [7, 0], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+      describe 'when its in the right up corner' do
+        before do
+          board[7][7] = king_white
+          board[6][6] = pawn_white
+        end
+        it 'returns the possible moves' do
+          possible_moves = [[6, 7], [7, 6]]
+          expect(king_moves(board, [7, 7], 'white')).to contain_exactly(*possible_moves)
+        end
+      end
+    end
+    describe 'when there is possible castling' do
+      describe '(long castling)' do
+        describe 'when its white king' do
+          describe 'and there is no piece between them' do
+            describe 'and its a long castling' do
+              describe 'at left' do
+                before do
+                  board[7][4] = king_white
+                  board[7][0] = rook_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 3], [7, 5], [6, 3], [6, 4], [6, 5], [7, 2]]
+                  expect(king_moves(board, [7, 4], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[7][3] = king_white
+                  board[7][7] = rook_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 2], [7, 4], [6, 2], [6, 3], [6, 4], [7, 5]]
+                  expect(king_moves(board, [7, 3], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
+            describe 'and its a short castling' do
+              describe 'at left' do
+                before do
+                  board[7][3] = king_white
+                  board[7][0] = rook_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 2], [7, 4], [6, 2], [6, 3], [6, 4], [7, 1]]
+                  expect(king_moves(board, [7, 3], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[7][4] = king_white
+                  board[7][7] = rook_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 3], [7, 5], [6, 3], [6, 4], [6, 5], [7, 6]]
+                  expect(king_moves(board, [7, 4], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
           end
-          it 'returns the possible moves' do
-            possible_moves = [[3, 4], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
-            expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
+          describe 'and there is a piece between them' do
+            describe 'and its a long castling' do
+              describe 'at left' do
+                before do
+                  board[7][4] = king_white
+                  board[7][0] = rook_white
+                  board[7][1] = pawn_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 3], [7, 5], [6, 3], [6, 4], [6, 5]]
+                  expect(king_moves(board, [7, 4], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[7][3] = king_white
+                  board[7][7] = rook_white
+                  board[7][6] = pawn_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 2], [7, 4], [6, 2], [6, 3], [6, 4]]
+                  expect(king_moves(board, [7, 3], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
+            describe 'and its a short castling' do
+              describe 'at left' do
+                before do
+                  board[7][3] = king_white
+                  board[7][0] = rook_white
+                  board[7][1] = pawn_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 2], [7, 4], [6, 2], [6, 3], [6, 4]]
+                  expect(king_moves(board, [7, 3], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[7][4] = king_white
+                  board[7][7] = rook_white
+                  board[7][6] = pawn_white
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[7, 3], [7, 5], [6, 3], [6, 4], [6, 5]]
+                  expect(king_moves(board, [7, 4], 'white')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
           end
         end
-        describe 'when its on the center but surrounded by white pieces' do
-          before do
-            board[4][4] = king_white
-            board[4][3] = pawn_white
-            board[5][4] = pawn_white
-            board[3][4] = pawn_white
-            board[4][6] = pawn_white
-            board[3][3] = pawn_white
+        describe 'when its black king' do
+          describe 'and there is no piece between them' do
+            describe 'and its a long castling' do
+              describe 'at left' do
+                before do
+                  board[0][4] = king_black
+                  board[0][0] = rook_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5], [0, 2]]
+                  expect(king_moves(board, [0, 4], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[0][3] = king_black
+                  board[0][7] = rook_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 2], [0, 4], [1, 2], [1, 3], [1, 4], [0, 5]]
+                  expect(king_moves(board, [0, 3], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
+            describe 'and its a short castling' do
+              describe 'at left' do
+                before do
+                  board[0][3] = king_black
+                  board[0][0] = rook_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 2], [0, 4], [1, 2], [1, 3], [1, 4], [0, 1]]
+                  expect(king_moves(board, [0, 3], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[0][4] = king_black
+                  board[0][7] = rook_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5], [0, 6]]
+                  expect(king_moves(board, [0, 4], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
           end
-          it 'returns the possible moves' do
-            possible_moves = [[3, 5], [4, 5], [5, 3], [5, 5]]
-            expect(king_moves(board, [4, 4], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the left down corner' do
-          before do
-            board[0][0] = king_white
-            board[0][1] = pawn_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[1, 0], [1, 1]]
-            expect(king_moves(board, [0, 0], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the right down corner' do
-          before do
-            board[0][7] = king_white
-            board[1][6] = pawn_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[0, 6], [1, 7]]
-            expect(king_moves(board, [0, 7], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the left up corner' do
-          before do
-            board[7][0] = king_white
-            board[6][1] = pawn_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[6, 0], [7, 1]]
-            expect(king_moves(board, [7, 0], 'white')).to contain_exactly(*possible_moves)
-          end
-        end
-        describe 'when its in the right up corner' do
-          before do
-            board[7][7] = king_white
-            board[6][6] = pawn_white
-          end
-          it 'returns the possible moves' do
-            possible_moves = [[6, 7], [7, 6]]
-            expect(king_moves(board, [7, 7], 'white')).to contain_exactly(*possible_moves)
+          describe 'and there is a piece between them' do
+            describe 'and its a long castling' do
+              describe 'at left' do
+                before do
+                  board[0][4] = king_black
+                  board[0][0] = rook_black
+                  board[0][1] = pawn_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]
+                  expect(king_moves(board, [0, 4], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[0][3] = king_black
+                  board[0][7] = rook_black
+                  board[0][6] = pawn_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 2], [0, 4], [1, 2], [1, 3], [1, 4]]
+                  expect(king_moves(board, [0, 3], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
+            describe 'and its a short castling' do
+              describe 'at left' do
+                before do
+                  board[0][3] = king_black
+                  board[0][0] = rook_black
+                  board[0][1] = pawn_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 2], [0, 4], [1, 2], [1, 3], [1, 4]]
+                  expect(king_moves(board, [0, 3], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+              describe 'at right' do
+                before do
+                  board[0][4] = king_black
+                  board[0][7] = rook_black
+                  board[0][6] = pawn_black
+                end
+                it 'returns the possible moves' do
+                  possible_moves = [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]
+                  expect(king_moves(board, [0, 4], 'black')).to contain_exactly(*possible_moves)
+                end
+              end
+            end
           end
         end
       end
