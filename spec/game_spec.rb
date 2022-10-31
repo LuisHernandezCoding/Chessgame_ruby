@@ -207,4 +207,46 @@ describe Game do
       end
     end
   end
+  describe '#check_for_promotion' do
+    describe 'when the white pawn' do
+      describe 'reaches the last row' do
+        before do
+          game.board.grid[0][0] = pawn_white
+        end
+        it 'promotes the pawn' do
+          game.check_for_promotion
+          expect(game.board.grid[0][0]).to eq(queen_white)
+        end
+      end
+      describe 'does not reach the last row' do
+        before do
+          game.board.grid[1][0] = pawn_white
+        end
+        it 'does not promote the pawn' do
+          game.check_for_promotion
+          expect(game.board.grid[1][0]).to eq(pawn_white)
+        end
+      end
+    end
+    describe 'when the black pawn' do
+      describe 'reaches the last row' do
+        before do
+          game.board.grid[7][0] = pawn_black
+        end
+        it 'promotes the pawn' do
+          game.check_for_promotion
+          expect(game.board.grid[7][0]).to eq(queen_black)
+        end
+      end
+      describe 'does not reach the last row' do
+        before do
+          game.board.grid[6][0] = pawn_black
+        end
+        it 'does not promote the pawn' do
+          game.check_for_promotion
+          expect(game.board.grid[6][0]).to eq(pawn_black)
+        end
+      end
+    end
+  end
 end

@@ -28,6 +28,7 @@ class Game
       print_disponibles_moves(moves)
       destiny = ask_for_destiny(moves)
       do_move(pick, destiny) if check_move(pick, destiny)
+      check_for_promotion
     end
   end
 
@@ -107,6 +108,18 @@ class Game
       next_turn
     else
       puts 'Invalid move'
+    end
+  end
+
+  def check_for_promotion
+    @board.grid.each_with_index do |row, index|
+      row.each_with_index do |cell, index2|
+        if cell == pawn_white && index.zero?
+          @board.grid[index][index2] = queen_white
+        elsif cell == pawn_black && index == 7
+          @board.grid[index][index2] = queen_black
+        end
+      end
     end
   end
 
