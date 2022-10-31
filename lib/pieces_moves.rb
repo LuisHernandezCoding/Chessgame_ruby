@@ -65,18 +65,19 @@ module PiecesMoves
     possible_moves
   end
 
-  def debug_print(board, possible_moves)
-    puts
+  def debug_print(board, possible_moves = [])
+    p '   _0___1___2___3___4___5___6___7_ '
+    board.map.with_index { |row, index| p "#{index} |_#{row.join('_|_')}_|" }
     p '-----------------------------'
-    board.map { |row| p row.join(' | ') }
-    p '-----------------------------'
-    moves = possible_moves
+    return if possible_moves.empty?
+
+    p '   _0___1___2___3___4___5___6___7_ '
     mapped_board = board.map.with_index do |row, i|
       row.map.with_index do |col, j|
-        moves.include?([i, j]) ? 'X' : col
+        possible_moves.include?([i, j]) ? 'X' : col
       end
     end
-    mapped_board.map { |row| p row.join(' | ') }
+    mapped_board.map.with_index { |row, index| p "#{index} |_#{row.join('_|_')}_|" }
   end
 
   private
