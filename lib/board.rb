@@ -1,8 +1,10 @@
 class Board
   attr_reader :grid
+  attr_accessor :history
 
   def initialize(grid = Array.new(8) { Array.new(8, ' ') })
     @grid = grid
+    @history = []
   end
 
   def [](pos)

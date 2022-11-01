@@ -8,13 +8,12 @@ class Game
   include PiecesMoves
   include Logic
 
-  attr_accessor :board, :turn, :turn_count, :history
+  attr_accessor :board, :turn, :turn_count
 
   def initialize
     @board = Board.new
     @turn = 'white'
     @turn_count = 0
-    @history = []
   end
 
   def start
@@ -22,14 +21,13 @@ class Game
     loop do
       break if king_on_checkmate?(@board.grid, @turn)
 
-      pick = ask_for_pick
-      pick = ask_for_pick until piece_moves(@board.grid, pick) != []
-      moves = piece_moves(@board.grid, pick)
+      pick = pick_piece
+      pick = pick_piece until piece_moves(@board.grid, pick) != []
+      moves = piece_moves(@board.grid, pick, @board.history.last)
       show_disponibles_moves(moves)
       print_disponibles_moves(moves)
       destiny = ask_for_destiny(moves)
       do_move(pick, destiny) if check_move(pick, destiny)
-      check_for_promotion
     end
   end
 
@@ -37,16 +35,9 @@ class Game
     checkmate?(grid, turn) if check?(grid, turn)
   end
 
-  def ask_for_pick
-    debug_print(@board.grid)
-    puts "#{@turn}'s turn"
-    pick_piece
-  end
-
   def pick_piece
-    puts 'Enter the coordinates of the piece you want to select'
-    puts 'For example: A2'
-    print '> '
+    debug_print(@board.grid)
+    print "#{@turn}'s turn > "
     own_pieces = @turn == 'white' ? white_pieces : black_pieces
     input = getting_user_input
     until @board.grid[input[0]][input[1]] != ' ' && own_pieces.include?(@board.grid[input[0]][input[1]])
@@ -98,19 +89,29 @@ class Game
   end
 
   def do_move(start_pos, destiny_pos)
-    if piece_moves(@board.grid, start_pos).include?(destiny_pos)
-      start_piece = @board.grid[start_pos[0]][start_pos[1]]
-      destiny_piece = @board.grid[destiny_pos[0]][destiny_pos[1]]
-      eated_piece = destiny_piece == ' ' ? ' ' : destiny_piece
-      @board.remove_piece(destiny_pos) if eated_piece != ' '
-      do_castling(destiny_pos) if start_piece == king_white || start_piece == king_black
-      @board.move_piece(start_pos, destiny_pos)
-      @turn_count += 1
-      @history << [start_piece, start_pos, destiny_piece, destiny_pos, eated_piece]
-      next_turn
-    else
-      puts 'Invalid move'
-    end
+    return unless piece_moves(@board.grid, start_pos, @board.history.last).include?(destiny_pos)
+
+    # Assigning variables
+    start_piece = @board.grid[start_pos[0]][start_pos[1]]
+    destiny_piece = @board.grid[destiny_pos[0]][destiny_pos[1]]
+    eated_piece = destiny_piece == ' ' ? ' ' : destiny_piece
+
+    # Moving the piece
+    @board.remove_piece(destiny_pos) if eated_piece != ' '
+    do_special_moves(start_pos, destiny_pos, start_piece)
+    @board.move_piece(start_pos, destiny_pos)
+
+    # Updating the history
+    @board.history << [start_piece, start_pos, destiny_piece, destiny_pos, eated_piece]
+
+    # Advancing logic
+    next_turn
+    check_for_promotion
+  end
+
+  def do_special_moves(start_pos, destiny_pos, start_piece)
+    do_castling(destiny_pos) if start_piece == king_white || start_piece == king_black
+    do_en_passant(start_pos, destiny_pos) if start_piece == pawn_white || start_piece == pawn_black
   end
 
   def do_castling(destiny_pos)
@@ -124,14 +125,33 @@ class Game
     @board.grid[line][rook_pos_y] = ' '
   end
 
-  def check_for_promotion
+  def do_en_passant(start_pos, destiny_pos)
+    # return unles its a pawn
+    start_piece = @board.grid[start_pos[0]][start_pos[1]]
+    return unless start_piece == pawn_white || start_piece == pawn_black
+    return unless en_passant?(start_pos, destiny_pos, @board.grid, @turn)
+
+    @board.remove_piece([start_pos[0], destiny_pos[1]])
+  end
+
+  def en_passant?(start_pos, destiny_pos, grid, turn)
+    line = turn == 'white' ? 4 : 3
+
+    return false unless start_pos[0] == line || grid[destiny_pos[0]][destiny_pos[1]] == ' '
+    return false if grid[start_pos[0]][destiny_pos[1]] == ' '
+    return false unless destiny_pos[0] == line + 2 || destiny_pos[0] == line - 2
+
+    true
+  end
+
+  def check_for_promotion(chose = @turn == 'black' ? queen_white : queen_black)
+    do_promotion(chose)
+  end
+
+  def do_promotion(chose)
     @board.grid.each_with_index do |row, index|
       row.each_with_index do |cell, index2|
-        if cell == pawn_white && index.zero?
-          @board.grid[index][index2] = queen_white
-        elsif cell == pawn_black && index == 7
-          @board.grid[index][index2] = queen_black
-        end
+        @board.grid[index][index2] = chose if (cell == pawn_white && index.zero?) || (cell == pawn_black && index == 7)
       end
     end
   end
@@ -139,26 +159,13 @@ class Game
   def getting_user_input
     input = gets.chomp.upcase
     input = gets.chomp.upcase until input.length == 2 && input[0].between?('A', 'H') && input[1].between?('1', '8')
-    row = input[0].ord - 65
-    column = input[1].to_i - 1
+    row = 8 - input[1].to_i
+    column = input[0].ord - 65
     [row, column]
   end
 
-  def debug_print(board)
-    system 'clear' or system 'cls'
-    puts '    1     2     3     4     5     6     7     8  '
-    puts '  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ '
-    board.map.with_index do |row, index|
-      letter = ('A'..'H').to_a[index]
-      puts ' ▕     ▕     ▕     ▕     ▕     ▕     ▕     ▕     ▕'
-      puts "#{letter}▕  #{row.join('  ▕  ')}  ▕ #{letter}"
-      puts ' ▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕' unless index == 7
-    end
-    puts ' ▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕'
-    puts '    1     2     3     4     5     6     7     8  '
-  end
-
   def next_turn
+    @turn_count += 1
     @turn = @turn == 'white' ? 'black' : 'white'
   end
 

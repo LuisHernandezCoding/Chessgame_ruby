@@ -76,16 +76,16 @@ module Logic
     nil
   end
 
-  def piece_moves(board, from)
+  def piece_moves(board, from, last_move = nil)
     piece = board[from[0]][from[1]]
     return [] if piece == ' '
 
-    return pieces_moves_helper_white(board, from, piece) if white_pieces.include?(piece)
-    return pieces_moves_helper_black(board, from, piece) if black_pieces.include?(piece)
+    return pieces_moves_helper_white(board, from, piece, last_move) if white_pieces.include?(piece)
+    return pieces_moves_helper_black(board, from, piece, last_move) if black_pieces.include?(piece)
   end
 
-  def pieces_moves_helper_white(board, from, piece)
-    return pawn_moves(board, from, 'white') if piece == pawn_white
+  def pieces_moves_helper_white(board, from, piece, last_move)
+    return pawn_moves(board, from, 'white', last_move) if piece == pawn_white
     return rook_moves(board, from, 'white') if piece == rook_white
     return bishop_moves(board, from, 'white') if piece == bishop_white
     return knight_moves(board, from, 'white') if piece == knight_white
@@ -93,12 +93,26 @@ module Logic
     return king_moves(board, from, 'white') if piece == king_white
   end
 
-  def pieces_moves_helper_black(board, from, piece)
-    return pawn_moves(board, from, 'black') if piece == pawn_black
+  def pieces_moves_helper_black(board, from, piece, last_move)
+    return pawn_moves(board, from, 'black', last_move) if piece == pawn_black
     return rook_moves(board, from, 'black') if piece == rook_black
     return bishop_moves(board, from, 'black') if piece == bishop_black
     return knight_moves(board, from, 'black') if piece == knight_black
     return queen_moves(board, from, 'black') if piece == queen_black
     return king_moves(board, from, 'black') if piece == king_black
+  end
+
+  def debug_print(board)
+    system 'clear' or system 'cls'
+    puts '    A     B     C     D     E     F     G     H   '
+    puts '  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁'
+    board.map.with_index do |row, index|
+      inversed_index = 7 - index + 1
+      puts ' ▕     ▕     ▕     ▕     ▕     ▕     ▕     ▕     ▕'
+      puts "#{inversed_index}▕  #{row.join('  ▕  ')}  ▕ #{inversed_index}"
+      puts ' ▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕' unless index == 7
+    end
+    puts ' ▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕'
+    puts '    A     B     C     D     E     F     G     H   '
   end
 end

@@ -25,6 +25,7 @@ module Pieces
   def king_white_rotated; '🨉'; end
   def king_black_rotated; '🨏'; end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def getting_rotated_pieces(piece)
     case piece
     when pawn_white then pawn_white_rotated
@@ -41,6 +42,7 @@ module Pieces
     when king_black then king_black_rotated
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def white_pieces
     [pawn_white, rook_white, knight_white, bishop_white, queen_white, king_white]
