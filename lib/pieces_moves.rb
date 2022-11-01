@@ -65,6 +65,35 @@ module PiecesMoves
     possible_moves
   end
 
+  def castling_helper(board, color)
+    if color == 'white'
+      actual_line = 7
+      actual_king = king_white
+      actual_rook = rook_white
+    else
+      actual_line = 0
+      actual_king = king_black
+      actual_rook = rook_black
+    end
+    moves = []
+    pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8 = board[actual_line]
+    moves << [actual_line, 6] if board[actual_line] == [pos1, pos2, pos3, pos4, actual_king, ' ', ' ', actual_rook]
+    moves << [actual_line, 5] if board[actual_line] == [pos1, pos2, pos3, actual_king, ' ', ' ', ' ', actual_rook]
+    moves << [actual_line, 1] if board[actual_line] == [actual_rook, ' ', ' ', actual_king, pos5, pos6, pos7, pos8]
+    moves << [actual_line, 2] if board[actual_line] == [actual_rook, ' ', ' ', ' ', actual_king, pos6, pos7, pos8]
+    moves
+  end
+
+  def castling_rook_helper(color, destiny_pos)
+    actual_line = color == 'white' ? 7 : 0
+    case destiny_pos[1]
+    when 6 then [actual_line, 5]
+    when 5 then [actual_line, 6]
+    when 2 then [actual_line, 3]
+    when 1 then [actual_line, 2]
+    end
+  end
+
   private
 
   def pawn_black_towards_helper(board, pos_x, pos_y)
@@ -289,25 +318,6 @@ module PiecesMoves
     moves << [pos_x - 1, pos_y - 1]
     moves += castling_helper(board, color)
     valid_moves(moves, board, color)
-  end
-
-  def castling_helper(board, color)
-    if color == 'white'
-      actual_line = 7
-      actual_king = king_white
-      actual_rook = rook_white
-    else
-      actual_line = 0
-      actual_king = king_black
-      actual_rook = rook_black
-    end
-    moves = []
-    pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8 = board[actual_line]
-    moves << [actual_line, 6] if board[actual_line] == [pos1, pos2, pos3, pos4, actual_king, ' ', ' ', actual_rook]
-    moves << [actual_line, 5] if board[actual_line] == [pos1, pos2, pos3, actual_king, ' ', ' ', ' ', actual_rook]
-    moves << [actual_line, 1] if board[actual_line] == [actual_rook, ' ', ' ', actual_king, pos5, pos6, pos7, pos8]
-    moves << [actual_line, 2] if board[actual_line] == [actual_rook, ' ', ' ', ' ', actual_king, pos6, pos7, pos8]
-    moves
   end
 
   def valid_moves(moves, board, color)

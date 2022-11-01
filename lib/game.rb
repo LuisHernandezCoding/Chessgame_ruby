@@ -23,6 +23,7 @@ class Game
       break if king_on_checkmate?(@board.grid, @turn)
 
       pick = ask_for_pick
+      pick = ask_for_pick until piece_moves(@board.grid, pick) != []
       moves = piece_moves(@board.grid, pick)
       show_disponibles_moves(moves)
       print_disponibles_moves(moves)
@@ -102,6 +103,7 @@ class Game
       destiny_piece = @board.grid[destiny_pos[0]][destiny_pos[1]]
       eated_piece = destiny_piece == ' ' ? ' ' : destiny_piece
       @board.remove_piece(destiny_pos) if eated_piece != ' '
+      do_castling(destiny_pos) if start_piece == king_white || start_piece == king_black
       @board.move_piece(start_pos, destiny_pos)
       @turn_count += 1
       @history << [start_piece, start_pos, destiny_piece, destiny_pos, eated_piece]
@@ -109,6 +111,17 @@ class Game
     else
       puts 'Invalid move'
     end
+  end
+
+  def do_castling(destiny_pos)
+    get_castling_moves = castling_helper(@board.grid, @turn)
+    return if get_castling_moves.empty?
+
+    line = @turn == 'white' ? 7 : 0
+    rook_pos_y = destiny_pos[1] == 6 ? 7 : 0
+    rook_destiny = castling_rook_helper(@turn, destiny_pos)
+    @board.grid[line][rook_destiny[1]] = @board.grid[line][rook_pos_y]
+    @board.grid[line][rook_pos_y] = ' '
   end
 
   def check_for_promotion
