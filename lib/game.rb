@@ -17,7 +17,7 @@ class Game
   end
 
   def start
-    create_board
+    @board.setup_board
     loop do
       break if king_on_checkmate?(@board.grid, @turn)
 
@@ -145,7 +145,29 @@ class Game
   end
 
   def check_for_promotion(chose = @turn == 'black' ? queen_white : queen_black)
-    do_promotion(chose)
+    p "Promotion to #{@turn} choose: (Q)ueen, (R)ook, (B)ishop, (K)night or stay (P)awn"
+    chose = gets.chomp.upcase until %w[Q R B K P].include?(chose)
+    do_promotion(@turn == 'black' ? convert_chose_white(chose) : convert_chose_black(chose))
+  end
+
+  def convert_chose_white(chose)
+    case chose
+    when 'Q' then queen_white
+    when 'R' then rook_white
+    when 'B' then bishop_white
+    when 'K' then knight_white
+    when 'P' then pawn_white
+    end
+  end
+
+  def convert_chose_black(chose)
+    case chose
+    when 'Q' then queen_black
+    when 'R' then rook_black
+    when 'B' then bishop_black
+    when 'K' then knight_black
+    when 'P' then pawn_black
+    end
   end
 
   def do_promotion(chose)
@@ -167,17 +189,5 @@ class Game
   def next_turn
     @turn_count += 1
     @turn = @turn == 'white' ? 'black' : 'white'
-  end
-
-  def create_board
-    @board = Board.new
-    @board.grid[0] = [rook_black, knight_black, bishop_black, queen_black,
-                      king_black, bishop_black, knight_black, rook_black]
-    @board.grid[1] = [pawn_black, pawn_black, pawn_black, pawn_black,
-                      pawn_black, pawn_black, pawn_black, pawn_black]
-    @board.grid[6] = [pawn_white, pawn_white, pawn_white, pawn_white,
-                      pawn_white, pawn_white, pawn_white, pawn_white]
-    @board.grid[7] = [rook_white, knight_white, bishop_white, queen_white,
-                      king_white, bishop_white, knight_white, rook_white]
   end
 end

@@ -1,4 +1,7 @@
+require_relative 'pieces'
+
 class Board
+  include Pieces
   attr_reader :grid
   attr_accessor :history
 
@@ -39,5 +42,16 @@ class Board
     raise 'position empty' if self[pos] == ' '
 
     self[pos] = ' '
+  end
+
+  def setup_board
+    @grid[0] = [rook_black, knight_black, bishop_black, queen_black,
+                king_black, bishop_black, knight_black, rook_black]
+    @grid[1] = [pawn_black, pawn_black, pawn_black, pawn_black,
+                pawn_black, pawn_black, pawn_black, pawn_black]
+    @grid[6] = [pawn_white, pawn_white, pawn_white, pawn_white,
+                pawn_white, pawn_white, pawn_white, pawn_white]
+    @grid[7] = [rook_white, knight_white, bishop_white, queen_white,
+                king_white, bishop_white, knight_white, rook_white]
   end
 end

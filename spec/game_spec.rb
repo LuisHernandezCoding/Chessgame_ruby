@@ -12,6 +12,10 @@ describe Game do
   subject(:game) { Game.new }
   subject(:board) { Board.new }
 
+  before do
+    allow(game).to receive(:gets).and_return('Q')
+  end
+
   describe '#initialize' do
     it 'creates a new board' do
       expect(game.board).to be_a(Board)
@@ -30,7 +34,7 @@ describe Game do
     describe 'when there is a possible En Passant' do
       let(:game) { Game.new }
       before do
-        game.create_board
+        game.board.setup_board
         game.do_move([6, 3], [4, 3])
         game.do_move([1, 4], [3, 4])
         game.do_move([4, 3], [3, 3])
@@ -43,7 +47,7 @@ describe Game do
     describe 'when an en passant is done' do
       let(:game) { Game.new }
       before do
-        game.create_board
+        game.board.setup_board
         game.do_move([6, 3], [4, 3])
         game.do_move([1, 2], [3, 2])
         game.do_move([4, 3], [3, 3])
@@ -63,7 +67,7 @@ describe Game do
     describe 'when a castling is done' do
       let(:game) { Game.new }
       before do
-        game.create_board
+        game.board.setup_board
         game.do_move([6, 1], [4, 1]) # white pawn
         game.do_move([1, 7], [3, 7]) # black pawn
         game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
@@ -94,7 +98,7 @@ describe Game do
     describe 'when promotion is done' do
       let(:game) { Game.new }
       before do
-        game.create_board
+        game.board.setup_board
         game.do_move([6, 1], [4, 1]) # white pawn
         game.do_move([1, 7], [3, 7]) # black pawn
         game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
@@ -112,6 +116,7 @@ describe Game do
         game.do_move([2, 2], [1, 2]) # white pawn
         game.do_move([1, 3], [3, 3]) # black pawn
         game.do_move([1, 2], [0, 2]) # white pawn (promotion)
+        allow(game).to receive(:gets).and_return('Q')
         game.check_for_promotion
       end
       it 'promotes the pawn to a queen' do
@@ -121,7 +126,7 @@ describe Game do
     describe 'when a check is done' do
       let(:game) { Game.new }
       before do
-        game.create_board
+        game.board.setup_board
         game.do_move([6, 1], [4, 1]) # white pawn
         game.do_move([1, 7], [3, 7]) # black pawn
         game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
@@ -158,7 +163,7 @@ describe Game do
     describe 'COMPLETE ROUND' do
       let(:game) { Game.new }
       before do
-        game.create_board
+        game.board.setup_board
         game.do_move([6, 1], [4, 1]) # white pawn
         game.do_move([1, 7], [3, 7]) # black pawn
         game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
@@ -293,7 +298,7 @@ describe Game do
       end
     end
   end
-  describe '#create_board' do
+  describe '#board.setup_board' do
     describe 'when no parameters are passed' do
       let(:new_board) { Array.new(8) { Array.new(8, ' ') } }
       before do
@@ -311,7 +316,7 @@ describe Game do
                         king_white, bishop_white, knight_white, rook_white]
       end
       it 'creates a new board' do
-        game.create_board
+        game.board.setup_board
         expect(game.board.grid).to eq(new_board)
       end
     end
@@ -386,6 +391,7 @@ describe Game do
       describe 'reaches the last row' do
         before do
           game.board.grid[0][0] = pawn_white
+          allow(game).to receive(:gets).and_return('Q')
         end
         it 'promotes the pawn' do
           game.next_turn
@@ -396,6 +402,7 @@ describe Game do
       describe 'does not reach the last row' do
         before do
           game.board.grid[1][0] = pawn_white
+          allow(game).to receive(:gets).and_return('Q')
         end
         it 'does not promote the pawn' do
           game.check_for_promotion
@@ -407,6 +414,7 @@ describe Game do
       describe 'reaches the last row' do
         before do
           game.board.grid[7][0] = pawn_black
+          allow(game).to receive(:gets).and_return('Q')
         end
         it 'promotes the pawn' do
           game.check_for_promotion
@@ -416,6 +424,7 @@ describe Game do
       describe 'does not reach the last row' do
         before do
           game.board.grid[6][0] = pawn_black
+          allow(game).to receive(:gets).and_return('Q')
         end
         it 'does not promote the pawn' do
           game.check_for_promotion
