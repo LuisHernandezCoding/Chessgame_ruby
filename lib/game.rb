@@ -2,18 +2,21 @@ require_relative 'pieces'
 require_relative 'pieces_moves'
 require_relative 'board'
 require_relative 'logic'
+require_relative 'display'
 
 class Game
   include Pieces
   include PiecesMoves
   include Logic
+  include Display
 
-  attr_accessor :board, :turn, :turn_count
+  attr_accessor :board, :turn, :turn_count, :messages
 
   def initialize
     @board = Board.new
     @turn = 'white'
     @turn_count = 0
+    @messages = []
   end
 
   def start
@@ -25,7 +28,6 @@ class Game
       pick = pick_piece until piece_moves(@board.grid, pick) != []
       moves = piece_moves(@board.grid, pick, @board.history.last)
       show_disponibles_moves(moves)
-      print_disponibles_moves(moves)
       destiny = ask_for_destiny(moves)
       do_move(pick, destiny) if check_move(pick, destiny)
     end
@@ -36,8 +38,10 @@ class Game
   end
 
   def pick_piece
-    debug_print(@board.grid)
-    print "#{@turn}'s turn > "
+    @messages[1] = "#{@turn}'s turn".upcase
+    @messages[2] = 'Enter the coordinates of the piece'
+    @messages[3] = 'Example: a1, or B2'
+    debug_print(@board.grid, @messages)
     own_pieces = @turn == 'white' ? white_pieces : black_pieces
     input = getting_user_input
     until @board.grid[input[0]][input[1]] != ' ' && own_pieces.include?(@board.grid[input[0]][input[1]])
@@ -46,37 +50,28 @@ class Game
     [input[0], input[1]]
   end
 
-  def print_disponibles_moves(moves)
-    mapped_board = @board.grid.map.with_index do |row, index|
-      row.map.with_index do |cell, index2|
-        cell = getting_rotated_pieces(cell) if cell != ' ' && moves.include?([index, index2])
-        cell = 'X' if moves.include?([index, index2]) && cell == ' '
-        cell
-      end
-    end
-    debug_print(mapped_board)
-  end
-
   def show_disponibles_moves(moves)
     notation = moves.map do |move|
-      letter = ('A'..'H').to_a[move[0]]
-      number = move[1] + 1
+      letter = (move[1] + 65).chr
+      number = 8 - move[0]
       "#{letter}#{number}"
     end
-    puts notation.join(', ')
+    @messages[2] = 'Enter the coordinates of the destiny'
+    @messages[3] = "possible moves: #{notation.join(', ')}"
+    print_disponibles_moves(moves, @board.grid, @messages)
   end
 
   def ask_for_destiny(moves)
-    puts 'Enter the coordinates of the destiny'
-    puts "possible moves: #{moves}"
-    print '> '
     destiny = getting_user_input
-    destiny = getting_user_input until moves.include?(destiny)
+    until moves.include?(destiny)
+      destiny = getting_user_input
+      @messages[2] = 'Invalid move, try again'
+    end
     destiny
   end
 
   def check_move(start_pos, destiny_pos)
-    possible_moves = piece_moves(@board.grid, start_pos)
+    possible_moves = piece_moves(@board.grid, start_pos, @board.history.last)
     return false unless possible_moves.include?(destiny_pos)
 
     simulated_board = @board.grid.map(&:clone)
@@ -106,7 +101,10 @@ class Game
 
     # Advancing logic
     next_turn
-    check_for_promotion
+    if (destiny_pos[0].zero? && start_piece == pawn_white) || (destiny_pos[0] == 7 && start_piece == pawn_black)
+      check_for_promotion
+    end
+    debug_print(@board.grid, @messages)
   end
 
   def do_special_moves(start_pos, destiny_pos, start_piece)
@@ -144,8 +142,11 @@ class Game
     true
   end
 
-  def check_for_promotion(chose = @turn == 'black' ? queen_white : queen_black)
-    p "Promotion to #{@turn} choose: (Q)ueen, (R)ook, (B)ishop, (K)night or stay (P)awn"
+  def check_for_promotion
+    @messages[2] = 'Select the piece you want to promote to'
+    @messages[3] = '(Q)ueen, (R)ook, (B)ishop'
+    @messages[4] = '(K)night or stay (P)awn'
+    debug_print(@board.grid, @messages)
     chose = gets.chomp.upcase until %w[Q R B K P].include?(chose)
     do_promotion(@turn == 'black' ? convert_chose_white(chose) : convert_chose_black(chose))
   end
@@ -176,6 +177,11 @@ class Game
         @board.grid[index][index2] = chose if (cell == pawn_white && index.zero?) || (cell == pawn_black && index == 7)
       end
     end
+    @messages[1] = ''
+    @messages[2] = ''
+    @messages[3] = ''
+    @messages[4] = ''
+    debug_print(@board.grid, @messages)
   end
 
   def getting_user_input
