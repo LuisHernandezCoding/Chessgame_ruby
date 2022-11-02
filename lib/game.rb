@@ -10,17 +10,17 @@ class Game
   include Logic
   include Display
 
-  attr_accessor :board, :turn, :turn_count, :messages
+  attr_accessor :board, :turn, :turn_count, :messages, :game_over
 
   def initialize
     @board = Board.new
     @turn = 'white'
     @turn_count = 0
     @messages = []
+    @game_over = false
   end
 
   def start
-    @board.setup_board
     loop do
       break if checkmate?(@board.grid, @turn) && check?(board.grid, @turn)
 
@@ -33,6 +33,9 @@ class Game
 
       do_move(pick, destiny) if check_move(pick, destiny)
     end
+    @messages = [@messages[0], 'CONGRATULATIONS!', "Checkmate, #{@turn} wins"]
+    print_board(@board.grid, @messages)
+    @game_over = true
   end
 
   def pick_piece
@@ -136,8 +139,7 @@ class Game
   end
 
   def check_for_promotion
-    @messages[2] = 'Select the piece you want to promote to'
-    @messages[3] = '(Q)ueen, (R)ook, (B)ishop'
+    @messages = [@messages[0], 'Select the piece you want to promote to', '(Q)ueen, (R)ook, (B)ishop']
     @messages[4] = '(K)night or stay (P)awn'
     board_print(@board.grid, @messages)
     chose = gets.chomp.upcase until %w[Q R B K P].include?(chose)
@@ -170,10 +172,7 @@ class Game
         @board.grid[index][index2] = chose if (cell == pawn_white && index.zero?) || (cell == pawn_black && index == 7)
       end
     end
-    @messages[1] = ''
-    @messages[2] = ''
-    @messages[3] = ''
-    @messages[4] = ''
+    @messages = [' ', ' ', ' ', ' ', ' ']
     board_print(@board.grid, @messages)
   end
 
