@@ -207,7 +207,7 @@ describe Game do
       end
     end
   end
-  describe '#king_on_checkmate?' do
+  describe '#checkmate?' do
     describe 'when the white king is on checkmate' do
       before do
         game.board.grid[0][0] = king_white
@@ -215,7 +215,7 @@ describe Game do
         game.board.grid[3][1] = queen_black
       end
       it 'returns true' do
-        expect(game.king_on_checkmate?(game.board.grid, 'white')).to be true
+        expect(game.checkmate?(game.board.grid, 'white')).to be true
       end
     end
     describe 'when the black king is on checkmate' do
@@ -225,7 +225,7 @@ describe Game do
         game.board.grid[3][1] = queen_white
       end
       it 'returns true' do
-        expect(game.king_on_checkmate?(game.board.grid, 'black')).to be true
+        expect(game.checkmate?(game.board.grid, 'black')).to be true
       end
     end
     describe 'when the white king is not on checkmate' do
@@ -236,7 +236,7 @@ describe Game do
         game.board.grid[0][1] = queen_white
       end
       it 'returns false' do
-        expect(game.king_on_checkmate?(game.board.grid, 'white')).to be false
+        expect(game.checkmate?(game.board.grid, 'white')).to be false
       end
     end
     describe 'when the black king is not on checkmate' do
@@ -247,7 +247,7 @@ describe Game do
         game.board.grid[0][1] = queen_black
       end
       it 'returns false' do
-        expect(game.king_on_checkmate?(game.board.grid, 'black')).to be false
+        expect(game.checkmate?(game.board.grid, 'black')).to be false
       end
     end
   end
@@ -380,7 +380,7 @@ describe Game do
         game.board.grid[0][1] = queen_black
       end
       it 'does not move the piece' do
-        game.do_move([0, 0], [0, 2])
+        game.do_move([0, 1], [0, 5]) if game.check_move([0, 1], [0, 5])
         expect(game.board.grid[0][0]).to eq(king_white)
         expect(game.board.grid[0][1]).to eq(queen_black)
       end

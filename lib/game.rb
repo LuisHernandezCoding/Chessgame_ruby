@@ -22,26 +22,22 @@ class Game
   def start
     @board.setup_board
     loop do
-      break if king_on_checkmate?(@board.grid, @turn)
+      break if checkmate?(@board.grid, @turn) && check?(board.grid, @turn)
 
       pick = pick_piece
-      pick = pick_piece until piece_moves(@board.grid, pick) != []
+      pick = pick_piece until piece_moves(@board.grid, pick, @board.history.last) != []
       moves = piece_moves(@board.grid, pick, @board.history.last)
       show_disponibles_moves(moves)
       destiny = ask_for_destiny(moves)
+      next unless moves.include?(destiny)
+
       do_move(pick, destiny) if check_move(pick, destiny)
     end
   end
 
-  def king_on_checkmate?(grid, turn)
-    checkmate?(grid, turn) if check?(grid, turn)
-  end
-
   def pick_piece
-    @messages[1] = "#{@turn}'s turn".upcase
-    @messages[2] = 'Enter the coordinates of the piece'
-    @messages[3] = 'Example: a1, or B2'
-    debug_print(@board.grid, @messages)
+    @messages = [@messages[0], "#{@turn}'s turn".upcase, 'Enter the coordinates of the piece', 'Example: A1']
+    board_print(@board.grid, @messages)
     own_pieces = @turn == 'white' ? white_pieces : black_pieces
     input = getting_user_input
     until @board.grid[input[0]][input[1]] != ' ' && own_pieces.include?(@board.grid[input[0]][input[1]])
@@ -55,9 +51,8 @@ class Game
       letter = (move[1] + 65).chr
       number = 8 - move[0]
       "#{letter}#{number}"
-    end
-    @messages[2] = 'Enter the coordinates of the destiny'
-    @messages[3] = "possible moves: #{notation.join(', ')}"
+    end.join(', ')
+    @messages = [@messages[0], @messages[1], 'Enter the coordinates of the destiny', "Possible moves: #{notation}"]
     print_disponibles_moves(moves, @board.grid, @messages)
   end
 
@@ -84,8 +79,6 @@ class Game
   end
 
   def do_move(start_pos, destiny_pos)
-    return unless piece_moves(@board.grid, start_pos, @board.history.last).include?(destiny_pos)
-
     # Assigning variables
     start_piece = @board.grid[start_pos[0]][start_pos[1]]
     destiny_piece = @board.grid[destiny_pos[0]][destiny_pos[1]]
@@ -104,7 +97,7 @@ class Game
     if (destiny_pos[0].zero? && start_piece == pawn_white) || (destiny_pos[0] == 7 && start_piece == pawn_black)
       check_for_promotion
     end
-    debug_print(@board.grid, @messages)
+    board_print(@board.grid, @messages)
   end
 
   def do_special_moves(start_pos, destiny_pos, start_piece)
@@ -146,7 +139,7 @@ class Game
     @messages[2] = 'Select the piece you want to promote to'
     @messages[3] = '(Q)ueen, (R)ook, (B)ishop'
     @messages[4] = '(K)night or stay (P)awn'
-    debug_print(@board.grid, @messages)
+    board_print(@board.grid, @messages)
     chose = gets.chomp.upcase until %w[Q R B K P].include?(chose)
     do_promotion(@turn == 'black' ? convert_chose_white(chose) : convert_chose_black(chose))
   end
@@ -181,7 +174,7 @@ class Game
     @messages[2] = ''
     @messages[3] = ''
     @messages[4] = ''
-    debug_print(@board.grid, @messages)
+    board_print(@board.grid, @messages)
   end
 
   def getting_user_input

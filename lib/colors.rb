@@ -8,7 +8,7 @@ class String
   bg_colors = { 'default' => '0', 'black' => '40', 'red' => '41', 'green' => '42', 'brown' => '43', 'blue' => '44',
                 'purple' => '45', 'cyan' => '46', 'gray' => '47', 'dark_gray' => '100', 'light_red' => '101',
                 'light_green' => '102', 'yellow' => '103', 'light_blue' => '104', 'light_purple' => '105',
-                'light_cyan' => '106', 'white' => '107'}
+                'light_cyan' => '106', 'white' => '107' }
 
   colors.each do |color, value|
     define_method(color) do
