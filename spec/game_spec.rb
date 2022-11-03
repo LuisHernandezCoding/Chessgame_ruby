@@ -3,11 +3,13 @@ require_relative '../lib/pieces_moves'
 require_relative '../lib/board'
 require_relative '../lib/logic'
 require_relative '../lib/game'
+require_relative '../lib/player_input'
 
 describe Game do
   include Pieces
   include PiecesMoves
   include Logic
+  include PlayerInput
 
   subject(:game) { Game.new }
   subject(:board) { Board.new }
@@ -254,7 +256,7 @@ describe Game do
   describe '#ask_for_destiny' do
     describe 'when the user enters a valid destiny' do
       before do
-        allow(game).to receive(:getting_user_input).and_return([0, 1])
+        allow(game).to receive(:getting_user_chose).and_return([0, 1])
       end
       it 'returns the destiny' do
         expect(game.ask_for_destiny([[0, 1]])).to eq([0, 1])
@@ -262,24 +264,24 @@ describe Game do
     end
     describe 'when the user enters an invalid destiny' do
       before do
-        allow(game).to receive(:getting_user_input).and_return([0, 1], [0, 2])
+        allow(game).to receive(:getting_user_chose).and_return([0, 1], [0, 2])
       end
       it 'returns the destiny' do
         expect(game.ask_for_destiny([[0, 1]])).to eq([0, 1])
       end
     end
   end
-  describe '#getting_user_input' do
+  describe '#getting_user_chose' do
     describe 'when the user inputs a valid position' do
       it 'returns the position as an array' do
         allow(game).to receive(:gets).and_return('A1')
-        expect(game.getting_user_input).to eq([7, 0])
+        expect(game.getting_user_chose).to eq([7, 0])
       end
     end
     describe 'when the user inputs an invalid position' do
       it 'asks the user to input a valid position' do
         allow(game).to receive(:gets).and_return('A9', 'A1')
-        expect(game.getting_user_input).to eq([7, 0])
+        expect(game.getting_user_chose).to eq([7, 0])
       end
     end
   end

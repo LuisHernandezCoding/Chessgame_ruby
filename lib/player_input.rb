@@ -1,0 +1,22 @@
+require_relative 'display'
+
+module PlayerInput
+  include Display
+
+  def getting_input(valid_inputs, board, messages)
+    input = gets.chomp
+    return input if valid_inputs.include?(input)
+
+    messages[1] = 'Invalid input, try again'
+    board_print(board, messages)
+    getting_input(valid_inputs, board, messages)
+  end
+
+  def getting_user_chose
+    input = gets.chomp.upcase
+    input = gets.chomp.upcase until input.length == 2 && input[0].between?('A', 'H') && input[1].between?('1', '8')
+    row = 8 - input[1].to_i
+    column = input[0].ord - 65
+    [row, column]
+  end
+end
