@@ -27,7 +27,7 @@ class Game
     loop do
       break if checkmate?(@board.grid, @turn) && check?(board.grid, @turn)
 
-      @check = check?(@board.grid, @turn) ? "WARNING: #{@turn} king is in check!" : ' '
+      @check = check?(@board.grid, @turn) ? "WARNING: #{@turn} king is in check!".red.bold.bg_gold.blink : ' '
       pick = pick_piece
       pick = pick_piece until piece_moves(@board.grid, pick, @board.history.last) != []
       moves = piece_moves(@board.grid, pick, @board.history.last)
@@ -38,15 +38,41 @@ class Game
       do_move(pick, destiny) if check_move(pick, destiny)
     end
     @messages = [@check, 'CONGRATULATIONS!', "Checkmate, #{@turn} wins"]
-    board_print(@board.grid, @messages)
+    board_print(@board.grid, @messages, @board.history)
     @game_over = true
   end
 
+  def save_game
+    save = { 'board' => @board, 'turn' => @turn, 'turn_count' => @turn_count, 'messages' => @messages,
+             'game_over' => @game_over, 'check' => @check }
+    File.write('./assets/save_game.yml', save.to_yaml)
+    @messages = [@check, 'Game saved', 'Exiting the game']
+    board_print(@board.grid, @messages, @board.history)
+    puts
+    exit
+  end
+
+  def load_game
+    save = YAML.unsafe_load(File.read('./assets/save_game.yml'))
+    @board = save['board']
+    @turn = save['turn']
+    @turn_count = save['turn_count']
+    @messages = save['messages']
+    @game_over = save['game_over']
+    @check = save['check']
+    @messages = [@check, 'Game loaded', 'Press any key to continue']
+    board_print(@board.grid, @messages, @board.history)
+    gets.chomp
+    start
+  end
+
   def pick_piece
-    @messages = [@check, "#{@turn}'s turn".upcase, 'Enter the coordinates of the piece', 'Example: A1']
-    board_print(@board.grid, @messages)
+    @messages = [@check, "#{@turn}'s turn".upcase, 'Enter the coordinates of the piece']
+    @messages[3] = 'Enter "save" to save the game' if @turn_count.positive?
+    board_print(@board.grid, @messages, @board.history)
     own_pieces = @turn == 'white' ? white_pieces : black_pieces
-    input = getting_user_chose
+    input = getting_user_chose(true)
+    save_game if input == 'SAVE'
     until @board.grid[input[0]][input[1]] != ' ' && own_pieces.include?(@board.grid[input[0]][input[1]])
       input = getting_user_chose
     end
@@ -54,10 +80,9 @@ class Game
   end
 
   def show_disponibles_moves(moves)
-    notation = moves.map do |move|
-      letter = (move[1] + 65).chr
-      number = 8 - move[0]
-      "#{letter}#{number}"
+    notation = []
+    moves.map do |move|
+      notation << transpose_notation(move)
     end
     @messages = [@check, @messages[1], 'Enter the coordinates of the destiny']
     if notation.length <= 4
@@ -66,7 +91,7 @@ class Game
       @messages[3] = "Possible moves: #{notation[0..(notation.length / 2) - 1].join(', ')}"
       @messages[4] = "and: #{notation[(notation.length / 2)..].join(', ')}"
     end
-    print_disponibles_moves(moves, @board.grid, @messages)
+    print_disponibles_moves(moves, @board, @messages, @board.history)
   end
 
   def ask_for_destiny(moves)
@@ -94,18 +119,21 @@ class Game
   def do_move(start_pos, destiny_pos)
     start_piece = @board.grid[start_pos[0]][start_pos[1]]
     destiny_piece = @board.grid[destiny_pos[0]][destiny_pos[1]]
-    eated_piece = destiny_piece == ' ' ? ' ' : destiny_piece
-    make_the_move(start_pos, destiny_pos, start_piece, eated_piece, destiny_piece)
+    make_the_move(start_pos, destiny_pos, start_piece, destiny_piece)
     if (destiny_pos[0].zero? && start_piece == pawn_white) || (destiny_pos[0] == 7 && start_piece == pawn_black)
       check_for_promotion
     end
-    board_print(@board.grid, @messages)
+    board_print(@board.grid, @messages, @board.history)
   end
 
-  def make_the_move(start_pos, destiny_pos, start_piece, eated_piece, destiny_piece)
-    @board.remove_piece(destiny_pos) if eated_piece != ' '
+  def make_the_move(start_pos, destiny_pos, start_piece, destiny_piece)
+    @board.remove_piece(destiny_pos) if destiny_piece != ' '
     do_castling(destiny_pos) if start_piece == king_white || start_piece == king_black
-    do_en_passant(start_pos, destiny_pos) if start_piece == pawn_white || start_piece == pawn_black
+    eated_piece = if start_piece == pawn_white || start_piece == pawn_black
+                    do_en_passant(start_pos, destiny_pos, destiny_piece)
+                  else
+                    destiny_piece
+                  end
     @board.move_piece(start_pos, destiny_pos)
     @board.history << [start_piece, start_pos, destiny_piece, destiny_pos, eated_piece]
     next_turn
@@ -122,13 +150,15 @@ class Game
     @board.grid[line][rook_pos_y] = ' '
   end
 
-  def do_en_passant(start_pos, destiny_pos)
+  def do_en_passant(start_pos, destiny_pos, destiny_piece)
     start_piece = @board.grid[start_pos[0]][start_pos[1]]
-    return unless start_piece == pawn_white || start_piece == pawn_black
-    return if destiny_pos[1] == start_pos[1]
-    return unless en_passant?(start_pos, destiny_pos, @board.grid, @turn)
+    return destiny_piece unless start_piece == pawn_white || start_piece == pawn_black
+    return destiny_piece if destiny_pos[1] == start_pos[1]
+    return destiny_piece unless en_passant?(start_pos, destiny_pos, @board.grid, @turn)
 
+    eated_piece = @board.grid[start_pos[0]][destiny_pos[1]]
     @board.remove_piece([start_pos[0], destiny_pos[1]])
+    eated_piece
   end
 
   def en_passant?(start_pos, destiny_pos, grid, turn)
@@ -144,8 +174,8 @@ class Game
   def check_for_promotion
     @messages = [@check, 'Select the piece you want to promote to', '(Q)ueen, (R)ook, (B)ishop']
     @messages[4] = '(K)night or stay (P)awn'
-    board_print(@board.grid, @messages)
-    chose = getting_input(%w[Q R B K P], @board.grid, @messages)
+    board_print(@board.grid, @messages, @board.history)
+    chose = getting_input(%w[Q R B K P], @board.grid, @messages, @board.history)
     do_promotion(@turn == 'black' ? convert_chose_white(chose) : convert_chose_black(chose))
   end
 
@@ -176,7 +206,7 @@ class Game
       end
     end
     @messages = [' ', ' ', ' ', ' ', ' ']
-    board_print(@board.grid, @messages)
+    board_print(@board.grid, @messages, @board.history)
   end
 
   def next_turn
