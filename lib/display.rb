@@ -6,16 +6,11 @@ module Display
 
   def board_print(board, messages)
     left_panel = []
-
-    # Board
     left_panel += getting_board(board)
-    # getting the logo
     getting_logo.each.with_index do |line, index|
       left_panel[index] += line.bg_gold.bold if left_panel[index]
       left_panel[index] == left_panel[index] + (' ' * (line.length - 1)) unless left_panel[index]
     end
-
-    # Adding messages
     messages.each_with_index do |message, index|
       next if message.nil?
 
@@ -23,8 +18,6 @@ module Display
       output = left_panel[(index * 2) + 15].gsub('                                          ', msg_to_add.center(42))
       left_panel[(index * 2) + 15] = output
     end
-
-    # Print the board
     system 'clear' or system 'cls'
     print_message(left_panel, 89, 'bg_black', 'bg_cyan', use_frame: false)
     print_input_field('bg_black', '>')

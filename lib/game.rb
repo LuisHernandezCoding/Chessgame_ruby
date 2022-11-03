@@ -20,12 +20,14 @@ class Game
     @turn_count = 0
     @messages = []
     @game_over = false
+    @check = ' '
   end
 
   def start
     loop do
       break if checkmate?(@board.grid, @turn) && check?(board.grid, @turn)
 
+      @check = check?(@board.grid, @turn) ? "WARNING: #{@turn} king is in check!" : ' '
       pick = pick_piece
       pick = pick_piece until piece_moves(@board.grid, pick, @board.history.last) != []
       moves = piece_moves(@board.grid, pick, @board.history.last)
@@ -35,13 +37,13 @@ class Game
 
       do_move(pick, destiny) if check_move(pick, destiny)
     end
-    @messages = [@messages[0], 'CONGRATULATIONS!', "Checkmate, #{@turn} wins"]
+    @messages = [@check, 'CONGRATULATIONS!', "Checkmate, #{@turn} wins"]
     board_print(@board.grid, @messages)
     @game_over = true
   end
 
   def pick_piece
-    @messages = [@messages[0], "#{@turn}'s turn".upcase, 'Enter the coordinates of the piece', 'Example: A1']
+    @messages = [@check, "#{@turn}'s turn".upcase, 'Enter the coordinates of the piece', 'Example: A1']
     board_print(@board.grid, @messages)
     own_pieces = @turn == 'white' ? white_pieces : black_pieces
     input = getting_user_chose
@@ -57,7 +59,7 @@ class Game
       number = 8 - move[0]
       "#{letter}#{number}"
     end
-    @messages = [@messages[0], @messages[1], 'Enter the coordinates of the destiny']
+    @messages = [@check, @messages[1], 'Enter the coordinates of the destiny']
     if notation.length <= 4
       @messages[3] = "Possible moves: #{notation.join(', ')}"
     else
@@ -140,7 +142,7 @@ class Game
   end
 
   def check_for_promotion
-    @messages = [@messages[0], 'Select the piece you want to promote to', '(Q)ueen, (R)ook, (B)ishop']
+    @messages = [@check, 'Select the piece you want to promote to', '(Q)ueen, (R)ook, (B)ishop']
     @messages[4] = '(K)night or stay (P)awn'
     board_print(@board.grid, @messages)
     chose = getting_input(%w[Q R B K P], @board.grid, @messages)
