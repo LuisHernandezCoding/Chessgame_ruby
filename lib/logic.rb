@@ -101,18 +101,4 @@ module Logic
     return queen_moves(board, from, 'black') if piece == queen_black
     return king_moves(board, from, 'black') if piece == king_black
   end
-
-  def debug_print(board)
-    system 'clear' or system 'cls'
-    puts '    A     B     C     D     E     F     G     H   '
-    puts '  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁'
-    board.map.with_index do |row, index|
-      inversed_index = 7 - index + 1
-      puts ' ▕     ▕     ▕     ▕     ▕     ▕     ▕     ▕     ▕'
-      puts "#{inversed_index}▕  #{row.join('  ▕  ')}  ▕ #{inversed_index}"
-      puts ' ▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕' unless index == 7
-    end
-    puts ' ▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕▁▁▁▁▁▕'
-    puts '    A     B     C     D     E     F     G     H   '
-  end
 end
