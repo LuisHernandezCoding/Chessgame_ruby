@@ -1,5 +1,4 @@
-require_relative '../lib/game'
+require_relative '../lib/menu'
 
-game = Game.new
-game.board.setup_board
-game.start
+menu = Menu.new
+menu.main

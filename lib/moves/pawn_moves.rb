@@ -56,6 +56,8 @@ module PawnMoves
 
   def white_en_passant_helper(pos_x, pos_y, last_move)
     possible_moves = []
+    return possible_moves if pos_x != 3
+
     possible_moves << [pos_x - 1, pos_y - 1] if last_move[0] == pawn_black && last_move[3] == [pos_x, pos_y - 1]
     possible_moves << [pos_x - 1, pos_y + 1] if last_move[0] == pawn_black && last_move[3] == [pos_x, pos_y + 1]
     possible_moves
@@ -63,6 +65,8 @@ module PawnMoves
 
   def black_en_passant_helper(pos_x, pos_y, last_move)
     possible_moves = []
+    return possible_moves if pos_x != 4
+
     possible_moves << [pos_x + 1, pos_y - 1] if last_move[0] == pawn_white && last_move[3] == [pos_x, pos_y - 1]
     possible_moves << [pos_x + 1, pos_y + 1] if last_move[0] == pawn_white && last_move[3] == [pos_x, pos_y + 1]
     possible_moves

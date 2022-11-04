@@ -37,10 +37,10 @@ describe Game do
       let(:game) { Game.new }
       before do
         game.board.setup_board
-        game.do_move([6, 3], [4, 3])
-        game.do_move([1, 4], [3, 4])
-        game.do_move([4, 3], [3, 3])
-        game.do_move([1, 2], [3, 2])
+        game.start_move([6, 3], [4, 3])
+        game.start_move([1, 4], [3, 4])
+        game.start_move([4, 3], [3, 3])
+        game.start_move([1, 2], [3, 2])
       end
       it 'returns the possible moves' do
         expect(piece_moves(game.board.grid, [3, 3], game.board.history.last)).to eql([[2, 3], [2, 2]])
@@ -50,11 +50,11 @@ describe Game do
       let(:game) { Game.new }
       before do
         game.board.setup_board
-        game.do_move([6, 3], [4, 3])
-        game.do_move([1, 2], [3, 2])
-        game.do_move([4, 3], [3, 3])
-        game.do_move([1, 4], [3, 4])
-        game.do_move([3, 3], [2, 4])
+        game.start_move([6, 3], [4, 3])
+        game.start_move([1, 2], [3, 2])
+        game.start_move([4, 3], [3, 3])
+        game.start_move([1, 4], [3, 4])
+        game.start_move([3, 3], [2, 4])
       end
       it 'deletes the pawn that was captured' do
         expect(game.board.grid[3][4]).to eql(' ')
@@ -70,19 +70,19 @@ describe Game do
       let(:game) { Game.new }
       before do
         game.board.setup_board
-        game.do_move([6, 1], [4, 1]) # white pawn
-        game.do_move([1, 7], [3, 7]) # black pawn
-        game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
-        game.do_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
-        game.do_move([7, 6], [5, 7]) # white knight
-        game.do_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
-        game.do_move([3, 1], [2, 2]) # white pawn (en passant)
-        game.do_move([0, 1], [2, 0]) # black knight
-        game.do_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
-        game.do_move([4, 7], [5, 6]) # black pawn (en passant)
-        game.do_move([7, 5], [6, 6]) # white bishop
-        game.do_move([1, 1], [2, 1]) # black pawn
-        game.do_move([7, 4], [7, 6]) # white king (castling)
+        game.start_move([6, 1], [4, 1]) # white pawn
+        game.start_move([1, 7], [3, 7]) # black pawn
+        game.start_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
+        game.start_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
+        game.start_move([7, 6], [5, 7]) # white knight
+        game.start_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
+        game.start_move([3, 1], [2, 2]) # white pawn (en passant)
+        game.start_move([0, 1], [2, 0]) # black knight
+        game.start_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
+        game.start_move([4, 7], [5, 6]) # black pawn (en passant)
+        game.start_move([7, 5], [6, 6]) # white bishop
+        game.start_move([1, 1], [2, 1]) # black pawn
+        game.start_move([7, 4], [7, 6]) # white king (castling)
       end
       it 'moves the king to the correct position' do
         expect(game.board.grid[7][6]).to eql(king_white)
@@ -101,23 +101,23 @@ describe Game do
       let(:game) { Game.new }
       before do
         game.board.setup_board
-        game.do_move([6, 1], [4, 1]) # white pawn
-        game.do_move([1, 7], [3, 7]) # black pawn
-        game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
-        game.do_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
-        game.do_move([7, 6], [5, 7]) # white knight
-        game.do_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
-        game.do_move([3, 1], [2, 2]) # white pawn (en passant)
-        game.do_move([0, 1], [2, 0]) # black knight
-        game.do_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
-        game.do_move([4, 7], [5, 6]) # black pawn (en passant)
-        game.do_move([7, 5], [6, 6]) # white bishop
-        game.do_move([1, 1], [2, 1]) # black pawn
-        game.do_move([7, 4], [7, 6]) # white king (castling)
-        game.do_move([0, 2], [1, 1]) # black bishop
-        game.do_move([2, 2], [1, 2]) # white pawn
-        game.do_move([1, 3], [3, 3]) # black pawn
-        game.do_move([1, 2], [0, 2]) # white pawn (promotion)
+        game.start_move([6, 1], [4, 1]) # white pawn
+        game.start_move([1, 7], [3, 7]) # black pawn
+        game.start_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
+        game.start_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
+        game.start_move([7, 6], [5, 7]) # white knight
+        game.start_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
+        game.start_move([3, 1], [2, 2]) # white pawn (en passant)
+        game.start_move([0, 1], [2, 0]) # black knight
+        game.start_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
+        game.start_move([4, 7], [5, 6]) # black pawn (en passant)
+        game.start_move([7, 5], [6, 6]) # white bishop
+        game.start_move([1, 1], [2, 1]) # black pawn
+        game.start_move([7, 4], [7, 6]) # white king (castling)
+        game.start_move([0, 2], [1, 1]) # black bishop
+        game.start_move([2, 2], [1, 2]) # white pawn
+        game.start_move([1, 3], [3, 3]) # black pawn
+        game.start_move([1, 2], [0, 2]) # white pawn (promotion)
         allow(game).to receive(:gets).and_return('Q')
         game.check_for_promotion
       end
@@ -129,34 +129,34 @@ describe Game do
       let(:game) { Game.new }
       before do
         game.board.setup_board
-        game.do_move([6, 1], [4, 1]) # white pawn
-        game.do_move([1, 7], [3, 7]) # black pawn
-        game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
-        game.do_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
-        game.do_move([7, 6], [5, 7]) # white knight
-        game.do_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
-        game.do_move([3, 1], [2, 2]) # white pawn (en passant)
-        game.do_move([0, 1], [2, 0]) # black knight
-        game.do_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
-        game.do_move([4, 7], [5, 6]) # black pawn (en passant)
-        game.do_move([7, 5], [6, 6]) # white bishop
-        game.do_move([1, 1], [2, 1]) # black pawn
-        game.do_move([7, 4], [7, 6]) # white king (castling)
-        game.do_move([0, 2], [1, 1]) # black bishop
-        game.do_move([2, 2], [1, 2]) # white pawn
-        game.do_move([1, 3], [3, 3]) # black pawn
-        game.do_move([1, 2], [0, 2]) # white pawn (promotion)
+        game.start_move([6, 1], [4, 1]) # white pawn
+        game.start_move([1, 7], [3, 7]) # black pawn
+        game.start_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
+        game.start_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
+        game.start_move([7, 6], [5, 7]) # white knight
+        game.start_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
+        game.start_move([3, 1], [2, 2]) # white pawn (en passant)
+        game.start_move([0, 1], [2, 0]) # black knight
+        game.start_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
+        game.start_move([4, 7], [5, 6]) # black pawn (en passant)
+        game.start_move([7, 5], [6, 6]) # white bishop
+        game.start_move([1, 1], [2, 1]) # black pawn
+        game.start_move([7, 4], [7, 6]) # white king (castling)
+        game.start_move([0, 2], [1, 1]) # black bishop
+        game.start_move([2, 2], [1, 2]) # white pawn
+        game.start_move([1, 3], [3, 3]) # black pawn
+        game.start_move([1, 2], [0, 2]) # white pawn (promotion)
         game.check_for_promotion
-        game.do_move([1, 1], [2, 2]) # black bishop
-        game.do_move([6, 4], [4, 4]) # white pawn
-        game.do_move([1, 6], [3, 6]) # black pawn
-        game.do_move([2, 0], [3, 2]) # white knight
-        game.do_move([0, 0], [0, 1]) # black rook
-        game.do_move([3, 2], [2, 4]) # white knight
-        game.do_move([0, 1], [1, 1]) # black rook
-        game.do_move([2, 4], [4, 3]) # white knight
-        game.do_move([5, 7], [3, 6]) # black knight
-        game.do_move([4, 3], [6, 4]) # white knight
+        game.start_move([1, 1], [2, 2]) # black bishop
+        game.start_move([6, 4], [4, 4]) # white pawn
+        game.start_move([1, 6], [3, 6]) # black pawn
+        game.start_move([2, 0], [3, 2]) # white knight
+        game.start_move([0, 0], [0, 1]) # black rook
+        game.start_move([3, 2], [2, 4]) # white knight
+        game.start_move([0, 1], [1, 1]) # black rook
+        game.start_move([2, 4], [4, 3]) # white knight
+        game.start_move([5, 7], [3, 6]) # black knight
+        game.start_move([4, 3], [6, 4]) # white knight
       end
       it 'checks the king' do
         expect(game.check?(game.board.grid, 'white')).to eql(true)
@@ -166,45 +166,45 @@ describe Game do
       let(:game) { Game.new }
       before do
         game.board.setup_board
-        game.do_move([6, 1], [4, 1]) # white pawn
-        game.do_move([1, 7], [3, 7]) # black pawn
-        game.do_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
-        game.do_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
-        game.do_move([7, 6], [5, 7]) # white knight
-        game.do_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
-        game.do_move([3, 1], [2, 2]) # white pawn (en passant)
-        game.do_move([0, 1], [2, 0]) # black knight
-        game.do_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
-        game.do_move([4, 7], [5, 6]) # black pawn (en passant)
-        game.do_move([7, 5], [6, 6]) # white bishop
-        game.do_move([1, 1], [2, 1]) # black pawn
-        game.do_move([7, 4], [7, 6]) # white king (castling)
-        game.do_move([0, 2], [1, 1]) # black bishop
-        game.do_move([2, 2], [1, 2]) # white pawn
-        game.do_move([1, 3], [3, 3]) # black pawn
-        game.do_move([1, 2], [0, 2]) # white pawn (promotion)
-        game.do_move([1, 1], [2, 2]) # black bishop
-        game.do_move([6, 4], [4, 4]) # white pawn
-        game.do_move([1, 6], [3, 6]) # black pawn
-        game.do_move([2, 0], [3, 2]) # white knight
-        game.do_move([0, 0], [0, 1]) # black rook
+        game.start_move([6, 1], [4, 1]) # white pawn
+        game.start_move([1, 7], [3, 7]) # black pawn
+        game.start_move([4, 1], [3, 1]) # white pawn (preparing for en passant)
+        game.start_move([3, 7], [4, 7]) # black pawn (preparing for en passant)
+        game.start_move([7, 6], [5, 7]) # white knight
+        game.start_move([1, 2], [3, 2]) # black pawn (prepared for en passant)
+        game.start_move([3, 1], [2, 2]) # white pawn (en passant)
+        game.start_move([0, 1], [2, 0]) # black knight
+        game.start_move([6, 6], [4, 6]) # white pawn (prepared for en passant)
+        game.start_move([4, 7], [5, 6]) # black pawn (en passant)
+        game.start_move([7, 5], [6, 6]) # white bishop
+        game.start_move([1, 1], [2, 1]) # black pawn
+        game.start_move([7, 4], [7, 6]) # white king (castling)
+        game.start_move([0, 2], [1, 1]) # black bishop
+        game.start_move([2, 2], [1, 2]) # white pawn
+        game.start_move([1, 3], [3, 3]) # black pawn
+        game.start_move([1, 2], [0, 2]) # white pawn (promotion)
+        game.start_move([1, 1], [2, 2]) # black bishop
+        game.start_move([6, 4], [4, 4]) # white pawn
+        game.start_move([1, 6], [3, 6]) # black pawn
+        game.start_move([2, 0], [3, 2]) # white knight
+        game.start_move([0, 0], [0, 1]) # black rook
       end
       it 'checksmates the king' do
-        game.do_move([3, 2], [2, 4]) # white knight
-        game.do_move([0, 1], [1, 1]) # black rook
-        game.do_move([2, 4], [4, 3]) # white knight
-        game.do_move([5, 7], [3, 6]) # black knight
-        game.do_move([4, 3], [6, 4]) # white knight
-        game.do_move([7, 6], [7, 7]) # black king
-        game.do_move([5, 6], [6, 5]) # white pawn
-        game.do_move([7, 5], [7, 4]) # black bishop
-        game.do_move([3, 6], [2, 4]) # white knight
-        game.do_move([6, 5], [7, 5]) # black pawn (promotion)
-        game.do_move([7, 4], [7, 5]) # white rook
-        game.do_move([0, 6], [2, 5]) # black knight
-        game.do_move([2, 4], [0, 3]) # white knight
-        game.do_move([6, 4], [5, 2]) # black knight
-        game.do_move([0, 3], [2, 4]) # white knight (check mate)
+        game.start_move([3, 2], [2, 4]) # white knight
+        game.start_move([0, 1], [1, 1]) # black rook
+        game.start_move([2, 4], [4, 3]) # white knight
+        game.start_move([5, 7], [3, 6]) # black knight
+        game.start_move([4, 3], [6, 4]) # white knight
+        game.start_move([7, 6], [7, 7]) # black king
+        game.start_move([5, 6], [6, 5]) # white pawn
+        game.start_move([7, 5], [7, 4]) # black bishop
+        game.start_move([3, 6], [2, 4]) # white knight
+        game.start_move([6, 5], [7, 5]) # black pawn (promotion)
+        game.start_move([7, 4], [7, 5]) # white rook
+        game.start_move([0, 6], [2, 5]) # black knight
+        game.start_move([2, 4], [0, 3]) # white knight
+        game.start_move([6, 4], [5, 2]) # black knight
+        game.start_move([0, 3], [2, 4]) # white knight (check mate)
         expect(game.checkmate?(game.board.grid, 'black')).to eql(true)
       end
     end
@@ -330,7 +330,7 @@ describe Game do
         game.board.grid[0][1] = queen_black
       end
       it 'returns true' do
-        expect(game.check_move([0, 0], [0, 1])).to be true
+        expect(check_move([0, 0], [0, 1], game.board, game.turn)).to be true
       end
     end
     describe 'when the move is invalid' do
@@ -340,7 +340,7 @@ describe Game do
           game.board.grid[0][1] = queen_black
         end
         it 'returns false' do
-          expect(game.check_move([0, 0], [0, 2])).to be false
+          expect(check_move([0, 0], [0, 2], game.board, game.turn)).to be false
         end
       end
       describe 'and outside the board' do
@@ -349,7 +349,7 @@ describe Game do
           game.board.grid[0][1] = queen_black
         end
         it 'returns false' do
-          expect(game.check_move([0, 0], [0, 8])).to be false
+          expect(check_move([0, 0], [0, 8], game.board, game.turn)).to be false
         end
       end
       describe 'and the king is on check' do
@@ -359,19 +359,19 @@ describe Game do
           game.board.grid[1][0] = queen_black
         end
         it 'returns false' do
-          expect(game.check_move([0, 0], [0, 1])).to be false
+          expect(check_move([0, 0], [0, 1], game.board, game.turn)).to be false
         end
       end
     end
   end
-  describe '#do_move' do
+  describe '#start_move' do
     describe 'when the move is valid' do
       before do
         game.board.grid[0][0] = king_white
         game.board.grid[0][1] = queen_black
       end
       it 'moves the piece' do
-        game.do_move([0, 0], [0, 1])
+        game.start_move([0, 0], [0, 1])
         expect(game.board.grid[0][1]).to eq(king_white)
         expect(game.board.grid[0][0]).to eq(' ')
       end
@@ -382,7 +382,7 @@ describe Game do
         game.board.grid[0][1] = queen_black
       end
       it 'does not move the piece' do
-        game.do_move([0, 1], [0, 5]) if game.check_move([0, 1], [0, 5])
+        game.start_move([0, 1], [0, 5]) if check_move([0, 1], [0, 5], game.board, game.turn)
         expect(game.board.grid[0][0]).to eq(king_white)
         expect(game.board.grid[0][1]).to eq(queen_black)
       end

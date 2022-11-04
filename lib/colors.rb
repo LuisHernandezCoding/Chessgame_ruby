@@ -23,7 +23,7 @@ class String
   end
 
   def bg_dark_yellow
-    bg_rgb(181, 170, 50)
+    bg_rgb(120, 120, 40)
   end
 
   def bg_light_yellow
