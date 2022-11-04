@@ -105,6 +105,19 @@ module PiecesMoves
     valid_moves
   end
 
+  def check_move(start_pos, destiny_pos, board, turn)
+    possible_moves = piece_moves(board.grid, start_pos, board.history.last)
+    return false unless possible_moves.include?(destiny_pos)
+
+    simulated_board = board.grid.map(&:clone)
+    start_piece = board.grid[start_pos[0]][start_pos[1]]
+    simulated_board[destiny_pos[0]][destiny_pos[1]] = start_piece
+    simulated_board[start_pos[0]][start_pos[1]] = ' '
+    return false if check?(simulated_board, turn)
+
+    true
+  end
+
   def inside_board?(move)
     return true if move[0].between?(0, 7) && move[1].between?(0, 7)
   end

@@ -1,17 +1,35 @@
 require_relative 'colors'
 require_relative 'console_printer'
+require_relative 'files_manager'
 
 module Display
   include ConsolePrinter
+  include FilesManager
 
   def board_print(board, messages, history)
     screen = []
     screen += getting_board(board)
-    screen = getting_board_header(screen, messages)
+    screen = getting_board_header(screen)
+    screen = getting_messages(screen, messages)
     screen = getting_history(screen, history)
     system 'clear' or system 'cls'
     print_message(screen, 100, 'bg_black', 'bg_cyan', use_frame: false)
     print_input_field('bg_black', '>')
+  end
+
+  def show_disponibles_moves(moves, board, messages, history)
+    notation = []
+    moves.map do |move|
+      notation << transpose_notation(move)
+    end
+    messages = [messages[0], messages[1], 'Enter the coordinates of the destiny']
+    if notation.length <= 4
+      messages[3] = "Possible moves: #{notation.join(', ')}"
+    else
+      messages[3] = "Possible moves: #{notation[0..(notation.length / 2) - 1].join(', ')}"
+      messages[4] = "and: #{notation[(notation.length / 2)..].join(', ')}"
+    end
+    print_disponibles_moves(moves, board, messages, history)
   end
 
   def print_disponibles_moves(moves, board, messages, history)
@@ -64,12 +82,7 @@ module Display
     inner_line
   end
 
-  def getting_board_header(screen, messages)
-    file = File.open('assets/logo.txt', 'r')
-    file.readlines.map(&:chomp).each.with_index do |line, index|
-      screen[index] += line.bg_gold.bold if screen[index]
-      screen[index] == screen[index] + (' ' * (line.length - 1)) unless screen[index]
-    end
+  def getting_messages(screen, messages)
     messages.each_with_index do |message, index|
       next if message.nil?
 
@@ -79,24 +92,5 @@ module Display
       screen[(index * 2) + 15] = output
     end
     screen
-  end
-
-  def getting_history(screen, history)
-    file = File.open('assets/history.txt', 'r')
-    file.readlines.map(&:chomp).each.with_index do |line, index|
-      screen[index] += line.bg_gold.bold if screen[index]
-      screen[index] == screen[index] + (' ' * (line.length - 1)) unless screen[index]
-    end
-    history = history[-24..] if history.length > 24
-    history.each_with_index do |move, index|
-      string = "#{move[0]}#{transpose_notation(move[1])}-#{transpose_notation(move[3])}#{move[4]}"
-      screen[index + 2] = screen[index + 2].gsub('         ', string.center(9))
-    end
-    screen
-  end
-
-  def getting_menu_logo
-    file = File.open('assets/menu.txt', 'r')
-    file.readlines.map(&:chomp).map
   end
 end

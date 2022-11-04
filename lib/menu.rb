@@ -23,7 +23,6 @@ class Menu
   def print_menu(title, options = %w[Start Load Exit])
     menu = []
     menu = getting_menu_logo
-    menu = menu.map { |line| line.center(100) }
     menu[2] = menu[2][0..76] + title.center(17) + menu[2][94..]
     options.each_with_index do |option, index|
       menu[3 + index] = menu[3 + index][0..76] + (index + 1).to_s + option.center(17) + menu[3 + index][95..]
