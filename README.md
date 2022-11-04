@@ -4,7 +4,7 @@ In this project i build a Chess game in ruby!, it can be executed and displayed 
 
 ###### - Extra: It can be saved every turn by input save and it can be loaded 
 
-##Preview
+## Previews
 > Menu preview
 ![Menu preview](assets/preview_menu.png)
 > 
@@ -18,7 +18,7 @@ In this project i build a Chess game in ruby!, it can be executed and displayed 
 ![Preview some moves 2](assets/preview_3.png)
 > 
 
-##The Game
+## The Game
 
 #### Definition
 > 'Chess' is a two-player strategy board game played on a chessboard, a checkered game board with 64 squares arranged in an eight-by-eight grid. It is one of the world's most popular games, played by millions of people worldwide in homes, parks, clubs, online, by correspondence, and in tournaments. Each player begins the game with 16 pieces: one king, one queen, two rooks, two knights, two bishops, and eight pawns. Each of the six piece types moves differently. Pieces are used to attack and capture the opponent's pieces, with the objective to 'checkmate' the opponent's king by placing it under an inescapable threat of capture. To this end, a player's pieces are used to attack and capture the opponent's pieces, while supporting each other so that none of the player's pieces are left in a vulnerable position that would allow the opponent to give check.
@@ -39,24 +39,24 @@ The rules of chess are fairly simple.
 - A draw can also occur if the game is not won by either player before the 50-move rule or the threefold repetition rule is satisfied.
 
 #### Pieces
-######The pieces are the following: King, Queen, Rooks, Knights, Bishops, and Pawns.
+###### The pieces are the following: King, Queen, Rooks, Knights, Bishops, and Pawns.
 
-#####The King
+##### The King
 > The King can move one square in any direction, as long as that square is not attacked by an enemy piece. Additionally, the king can perform a special move, known as castling. This move involves moving the king two squares toward a rook on the player's first rank, and then moving the rook to the square over which the king crossed.
 
-#####The Queen
+##### The Queen
 > The Queen can move any number of unoccupied squares in a straight line vertically, horizontally, or diagonally, thus combining the moves of the rook and bishop. The queen captures by occupying the square on which an enemy piece sits.
 
-#####The Rooks
+##### The Rooks
 > The Rooks can move any number of unoccupied squares along a rank or file, but may not leap over other pieces. Along with the king, a rook is involved during the king's castling move. Rooks move when the king castles kingside or queen's side.
 
-#####The Bishops
+##### The Bishops
 > The Bishops can move any number of unoccupied squares diagonally, but may not leap over other pieces. Bishops combine the power of a rook and a knight. Bishops have the same power as rooks, but are limited to diagonal movement.
 
-#####The Knight
+##### The Knight
 > The Knights move to any of the closest squares that are not on the same rank, file, or diagonal, thus the move forms an "L"-shape: two squares vertically and one square horizontally, or two squares horizontally and one square vertically. The knight is the only piece that can leap over other pieces. The knight moves to the nearest square not on the same rank, file, or diagonal
 
-#####The Pawns
+##### The Pawns
 > The Pawns move forward to the unoccupied square immediately in front of them on the same file, or optionally to the second unoccupied square in front of them on the same file, provided they have not yet made a move. A pawn has two special moves: the en passant capture and promotion.
 
 #### How to play
@@ -64,7 +64,7 @@ The rules of chess are fairly simple.
 
 > - The game is played by two players. White moves first, then the players alternate in moving one piece per move. The game ends when checkmate occurs, when a player resigns, or when a draw is agreed. A draw can also occur if the game is not won by either player before the 50-move rule or the threefold repetition rule is satisfied.
 
-##Learning outcome
+## Learning outcome
 
 ##### Learning Goals / Areas of Focus
 
@@ -140,7 +140,7 @@ rspec
 
 ## Credits
 
-####Project made mainly for 
+#### Project made mainly for 
 [The Odin Project](https://www.theodinproject.com)
 [(Full stack ruby on rails)](https://www.theodinproject.com/paths/full-stack-ruby-on-rails/courses/ruby)
 [Ruby Chess](https://www.theodinproject.com/lessons/ruby-ruby-final-project)
