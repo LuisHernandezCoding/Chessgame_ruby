@@ -17,7 +17,7 @@ module FilesManager
     history = history[-24..] if history.length > 24
     history.each_with_index do |move, index|
       string = "#{move[0]}#{transpose_notation(move[1])}-#{transpose_notation(move[3])}#{move[4]}"
-      screen[index + 2] = screen[index + 2].gsub('         ', string.center(9))
+      screen[index + 2] = screen[index + 2].gsub('▏         ▕', "▏#{string.center(9)}▕")
     end
     screen
   end
