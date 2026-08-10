@@ -54,4 +54,26 @@ class Board
     @grid[7] = [rook_white, knight_white, bishop_white, queen_white,
                 king_white, bishop_white, knight_white, rook_white]
   end
+
+  def to_fen
+    piece_map = {
+      king_white => 'K', queen_white => 'Q', rook_white => 'R', bishop_white => 'B', knight_white => 'N', pawn_white => 'P',
+      king_black => 'k', queen_black => 'q', rook_black => 'r', bishop_black => 'b', knight_black => 'n', pawn_black => 'p'
+    }
+
+    @grid.map do |row|
+      empty_count = 0
+      fen_row = row.each_with_object([]) do |piece, squares|
+        if piece == ' '
+          empty_count += 1
+        else
+          squares << empty_count.to_s if empty_count.positive?
+          empty_count = 0
+          squares << piece_map.fetch(piece)
+        end
+      end
+      fen_row << empty_count.to_s if empty_count.positive?
+      fen_row.join
+    end.join('/')
+  end
 end

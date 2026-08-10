@@ -4,6 +4,8 @@ require_relative 'board'
 require_relative 'logic'
 require_relative 'display'
 require_relative 'player_input'
+require_relative 'jsonl_logger'
+require_relative 'jsonl_input_reader'
 
 class Game
   include Pieces
@@ -14,13 +16,19 @@ class Game
 
   attr_accessor :board, :turn, :turn_count, :messages, :game_over
 
-  def initialize
+  def initialize(mcp_mode: false)
     @board = Board.new
     @turn = 'white'
     @turn_count = 0
     @messages = []
     @game_over = false
     @check = ' '
+    return unless mcp_mode
+
+    mcp_directory = File.expand_path('../..', __dir__)
+    log_path = File.join(mcp_directory, 'mcp_game.jsonl')
+    @logger = JsonlLogger.new(log_path)
+    self.mcp_input_source = JsonlInputReader.new(log_path, File.join(mcp_directory, 'mcp_move.txt'))
   end
 
   def start
@@ -97,6 +105,7 @@ class Game
                   end
     @board.move_piece(start_pos, destiny_pos)
     @board.history << [start_piece, start_pos, destiny_piece, destiny_pos, eated_piece]
+    log_move(start_pos, destiny_pos, start_piece, eated_piece) if @logger
   end
 
   def do_castling(destiny_pos)
@@ -172,5 +181,20 @@ class Game
   def next_turn
     @turn_count += 1
     @turn = @turn == 'white' ? 'black' : 'white'
+  end
+
+  private
+
+  def log_move(start_pos, destiny_pos, start_piece, captured_piece)
+    @logger.log_move(
+      turn_number: @turn_count + 1,
+      player: @turn,
+      piece_unicode: start_piece,
+      from_algebraic: transpose_notation(start_pos).downcase,
+      to_algebraic: transpose_notation(destiny_pos).downcase,
+      captured: captured_piece == ' ' ? nil : captured_piece,
+      board_fen: @board.to_fen,
+      in_check: check?(@board.grid, @turn == 'white' ? 'black' : 'white')
+    )
   end
 end

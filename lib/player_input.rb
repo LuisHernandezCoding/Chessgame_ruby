@@ -3,8 +3,10 @@ require_relative 'display'
 module PlayerInput
   include Display
 
+  attr_writer :mcp_input_source
+
   def getting_input(valid_inputs, board, messages, history)
-    input = gets.chomp.upcase
+    input = read_input.chomp.upcase
     return input if valid_inputs.include?(input)
 
     messages[1] = 'Invalid input, try again'
@@ -13,16 +15,16 @@ module PlayerInput
   end
 
   def getting_user_chose(can_save: false)
-    input = gets.chomp.upcase
+    input = read_input.chomp.upcase
     return input if input == 'SAVE' && can_save
 
-    input = gets.chomp.upcase until input.length == 2 && input[0].between?('A', 'H') && input[1].between?('1', '8')
+    input = read_input.chomp.upcase until input.length == 2 && input[0].between?('A', 'H') && input[1].between?('1', '8')
     transpose_input(input)
   end
 
   def menu_input(options = %w[1 2 3 4])
-    chose = gets.chomp.downcase
-    chose = gets.chomp.downcase until chose.match(/[#{options.join}]/)
+    chose = read_input.chomp.downcase
+    chose = read_input.chomp.downcase until chose.match?(/[#{options.join}]/)
     chose
   end
 
@@ -55,5 +57,17 @@ module PlayerInput
       @messages[2] = 'Invalid move, try again'
     end
     destiny
+  end
+
+  private
+
+  def read_input
+    return $stdin.gets unless mcp_input?
+
+    @mcp_input_source.gets
+  end
+
+  def mcp_input?
+    defined?(@mcp_input_source) && @mcp_input_source && @turn == 'black'
   end
 end

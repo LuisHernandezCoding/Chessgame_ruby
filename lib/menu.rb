@@ -9,14 +9,18 @@ class Menu
   include Display
   include PlayerInput
 
+  def initialize(mcp_mode: false)
+    @mcp_mode = mcp_mode
+  end
+
   def start
-    game = Game.new
+    game = Game.new(mcp_mode: @mcp_mode)
     game.board.setup_board
     game.start
   end
 
   def load_game
-    game = Game.new
+    game = Game.new(mcp_mode: @mcp_mode)
     game.load_game
   end
 
