@@ -37,4 +37,12 @@ describe McpCommandBroker do
 
     expect(broker.process('elegir e2')).to eq('La pieza en e2 no es negra.')
   end
+
+  it 'filters white legal moves against the white king' do
+    board = Board.new
+    board.setup_board
+    moves = broker.send(:legal_moves, board, [6, 4])
+
+    expect(moves).to include([5, 4], [4, 4])
+  end
 end

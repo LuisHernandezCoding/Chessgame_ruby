@@ -128,7 +128,9 @@ class McpCommandBroker
 
   def legal_moves(board, position)
     moves = piece_moves(board.grid, position, board.history.last) || []
-    moves.select { |destination| check_move(position, destination, board, 'black') }
+    piece = board[position]
+    color = white_pieces.include?(piece) ? 'white' : 'black'
+    moves.select { |destination| check_move(position, destination, board, color) }
   end
 
   def black_to_move?(turns)
